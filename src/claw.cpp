@@ -1,8 +1,5 @@
 #include "const.h"
 #include "claw.h"
-#include <Servo.h>
-
-int base_pos;
 
 //servos 
 Servo servoClaw;
@@ -20,7 +17,6 @@ void clawSetup() {
   servoClaw.write(CLAWMAX);
   servoBase.write(90);
   delay(1000);
-  base_pos = 90;
 
 };
 
@@ -41,11 +37,11 @@ void rotateZero(int base_current_pos){
         delay(30);
     }
     else{}
-
-    base_pos = 90;
 }
 
-void baseRotate(int base_target_pos, int base_current_pos){
+
+//returns current position
+int baseRotate(int base_target_pos, int base_current_pos){
     if (base_current_pos< base_target_pos){
         while(base_current_pos < base_target_pos){
             servoBase.write(base_current_pos);
@@ -61,7 +57,7 @@ void baseRotate(int base_target_pos, int base_current_pos){
         }
     }
     else{}
-    base_pos = base_current_pos;
+    return base_current_pos;
 }
 
 void clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipline2 = 2
@@ -109,10 +105,6 @@ void BackwardStep(float distancecm)
     delay(2);
     digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
   }
-}
-
-int getBasePos(){
-    return base_pos;
 }
 
 // returns safe = 1 to pick up treasure; if its bomb, claw won't pick up

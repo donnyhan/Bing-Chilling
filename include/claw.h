@@ -1,4 +1,5 @@
-#include "const.h"
+#ifndef CLAW_H
+#define CLAW_H
 
 class claw
 {
@@ -14,3 +15,5 @@ int getBasePos(int base_pos);
 int bomb();
 
 };
+
+#endif
