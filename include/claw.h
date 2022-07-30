@@ -1,6 +1,6 @@
 #include "const.h"
 
-class clawTreasure
+class claw
 {
 public:
 void clawSetup();
