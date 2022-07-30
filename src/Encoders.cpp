@@ -1,15 +1,6 @@
 
 #include "const.h"
 #include "Encoders.h"
-#define MOTOR_R_CW PA_2
-#define MOTOR_R_CCW PA_3
-
-#define MOTOR_L_CW PB_8
-#define MOTOR_L_CCW PB_9
-
-#define PWMFREQ 2000
-#define FWD_SPEED 885
-#define BACK_SPEED 885
 
 Encoders::Encoders(SensorArray sensor_arr)
 {

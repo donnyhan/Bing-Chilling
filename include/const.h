@@ -1,3 +1,6 @@
+#ifndef CONST_H
+#define CONST_H
+
 #include <Arduino.h>
 #include <Adafruit_SSD1306.h>
 #include <Servo.h>
@@ -54,6 +57,12 @@
 //////
 
 //clawTreasure
+Servo servoClaw;
+Servo servoJoint;
+Servo servoBase;
+const int CLAWMAX = 150;
+const int BASEMAXDISP = 60;
+const int JOINTMAX = 130;
 
 //SONAR
 #define MAX_DISTANCE 400
@@ -64,6 +73,7 @@
 
 //HALL
 #define bombThreshold 100
+
 
 
 #define MOTOR_FREQ 500
@@ -78,3 +88,5 @@
 #define ENC_R_FWD 61
 #define ENC_L_FWD 61
 #define ENC_STRAIGHT_SPEED 890
+
+#endif

@@ -1,7 +1,6 @@
 #include "const.h"
 #include "sonar.h"
 #include "claw.h"
-#include "claw.cpp"
 #include <NewPing.h>
 
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
