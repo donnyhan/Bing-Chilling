@@ -1,7 +1,16 @@
 #include "const.h"
 #include "claw.h"
+#include <Servo.h>
 
 int base_pos;
+
+//servos 
+Servo servoClaw;
+Servo servoJoint;
+Servo servoBase;
+const int CLAWMAX = 150;
+const int BASEMAXDISP = 60;
+const int JOINTMAX = 130;
 
 void clawSetup() {
   servoJoint.write(180);
@@ -77,36 +86,6 @@ void clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipline2 = 
     }
 }
 
-void clawPickUp(int current_base_pos){ //sonar successfully detects treasure
-
-    //close claw
-    for (int claw_pos = CLAWMAX; claw_pos > 0; claw_pos -= 1) { 
-        servoClaw.write(claw_pos);
-        delay(10);
-    } 
-
-    //centre the base
-    rotateZero(current_base_pos);
-
-    //rack to depositing position
-    BackwardStep(1.5);
-
-    //raise joint
-    clawJoint(1);
-
-    //open claw
-    for (int claw_pos = 0; claw_pos <= CLAWMAX; claw_pos += 1) { 
-        servoClaw.write(claw_pos);
-        delay(10);         
-    }
-
-    //lower joint
-    clawJoint(0);
-    
-    //return to rack original position
-    BackwardStep(7.5);
-}
-
 //pinion
 void ForwardStep(float distancecm) 
 {
@@ -147,4 +126,34 @@ int bomb(){
   }
 
   return safe;
+}
+
+void clawPickUp(int current_base_pos){ //sonar successfully detects treasure
+
+    //close claw
+    for (int claw_pos = CLAWMAX; claw_pos > 0; claw_pos -= 1) { 
+        servoClaw.write(claw_pos);
+        delay(10);
+    } 
+
+    //centre the base
+    rotateZero(current_base_pos);
+
+    //rack to depositing position
+    BackwardStep(1.5);
+
+    //raise joint
+    clawJoint(1);
+
+    //open claw
+    for (int claw_pos = 0; claw_pos <= CLAWMAX; claw_pos += 1) { 
+        servoClaw.write(claw_pos);
+        delay(10);         
+    }
+
+    //lower joint
+    clawJoint(0);
+    
+    //return to rack original position
+    BackwardStep(7.5);
 }

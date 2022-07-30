@@ -44,12 +44,6 @@
 //Claw sonar sensor
 #define TRIG_PIN PB15
 #define ECHO_PIN PB15
-//servos 
-Servo servoClaw;
-Servo servoJoint;
-Servo servoBase;
-
-
 
 //4 bar linkage
 #define linkL PA8
@@ -60,11 +54,6 @@ Servo servoBase;
 //////
 
 //clawTreasure
-const int CLAWMAX = 150;
-const int BASEMAXDISP = 60;
-const int JOINTMAX = 130;
-
-
 
 //SONAR
 #define MAX_DISTANCE 400

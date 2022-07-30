@@ -3,8 +3,6 @@
 #include <Adafruit_SSD1306.h>
 
 #include <const.h>
-#include <sonar.h>
-#include <const.h>
 #include <pinSetup.h>
 #include <Encoders.h>
 #include <sonar.cpp>
