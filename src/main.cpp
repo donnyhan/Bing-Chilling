@@ -5,9 +5,8 @@
 #include <const.h>
 #include <pinSetup.h>
 #include <Encoders.h>
-#include <sonar.cpp>
-
-#include <claw.cpp>
+#include <sonar.h>
+#include <claw.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -18,9 +17,17 @@ float soundcm;
 
 void setup() {
 
-  clawSetup();
   pinSetup();
   soundcm = getSoundSpeed();
+
+  //claw setup
+  servoJoint.write(180);
+  servoClaw.attach(SERVOCLAW);
+  servoJoint.attach(SERVOJOINT);
+  servoBase.attach(SERVOBASE);
+  servoClaw.write(CLAWMAX);
+  servoBase.write(90);
+  delay(1000);
   
   // put your setup code here, to run once:
   display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);

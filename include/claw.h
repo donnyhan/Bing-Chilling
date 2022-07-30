@@ -1,17 +1,8 @@
+#ifndef CLAW_H
+#define CLAW_H
+
 #include "const.h"
-
 //servos 
-
-void clawSetup() {
-  servoJoint.write(180);
-  servoClaw.attach(SERVOCLAW);
-  servoJoint.attach(SERVOJOINT);
-  servoBase.attach(SERVOBASE);
-  servoClaw.write(CLAWMAX);
-  servoBase.write(90);
-  delay(1000);
-
-};
 
 void rotateZero(int base_current_pos){
     
@@ -142,3 +133,5 @@ void clawPickUp(int current_base_pos){ //sonar successfully detects treasure
     //return to rack original position
     BackwardStep(7.5);
 }
+
+#endif

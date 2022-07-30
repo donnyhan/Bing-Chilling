@@ -4,18 +4,18 @@
 
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
-float getDist(float soundcm){
-    float dur = sonar.ping_median(ITERATIONS);
-    float dist = (dur/200)*soundcm;
-    return dist;
-}
-
 float getSoundSpeed(){
     //sound speed in m/s
     float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
     //convert to cm/ms
     float soundcm = soundc / 100;
     return soundcm;
+}
+
+float getDist(float soundcm){
+    float dur = sonar.ping_median(ITERATIONS);
+    float dist = (dur/200)*soundcm;
+    return dist;
 }
 
 void detecting(float soundcm, int targ_base_pos) { //target base position is the estimated position
@@ -38,15 +38,19 @@ void detecting(float soundcm, int targ_base_pos) { //target base position is the
         if (distance < 20){
             //Robot stops moving (wheel speed zero) 
             base_pos = baseRotate(targL, base_pos);
+            delay(30);
             distanceL = getDist(soundcm);
 
             base_pos = baseRotate(targ_base_pos-10, base_pos);
+            delay(30);
             distanceL2 = getDist(soundcm);
 
             base_pos = baseRotate(targ_base_pos+10, base_pos);
+            delay(30);
             distanceR2 = getDist(soundcm);
 
             base_pos = baseRotate(targR, base_pos);
+            delay(30);
             distanceR = getDist(soundcm);
 
             if((distance-distanceL)>= 6 && (distance-distanceR >= 6)){ // it's a potential treasure
