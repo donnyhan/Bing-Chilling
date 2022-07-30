@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Adafruit_SSD1306.h>
+#include <Servo.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -7,38 +8,84 @@
 
 // all pins defined here
 
-#define BIG_SERVO PA_0
-#define CLAWSERVO PA_1
-#define HALL PA_2
-#define REFLC3 PA_3
-#define IR1 PA_4
-#define IR2 PA_5
-#define BIG_SERVO_ARM PA_6
-#define SERVO_JOINT PA_7
-#define SERVO_HOOK PA_8
-#define MOTOR_L_PINION PA_9
-#define MOTOR_R_PINION PA_10
-#define SONAR_LA_EDGE PA_11
-#define SONAR_LB_EDGE PA_12
-#define SONAR_RA_EDGE PA_13
-#define SONAR_RB_EDGE PA_14
-#define MSWITCH PA_15
-#define REFLEC1 PB_0
-#define REFLEC2 PB_1
-// PB 2 skipped
-#define ENCODER_A PB_3
-#define ENCODER_B PB_4
-// PB 5 tentative if needed
-#define ENCODER PB_5
+//claw
+#define stp PB12
+#define dir PB13
+#define SERVOCLAW PA1
+#define SERVOJOINT PA10
+#define SERVOBASE PA0
 
-#define WHEEL_L_A PB_6
-#define WHEEL_L_B PB_7
-#define WHEEL_R_A PB_8
-#define WHEEL_R_B PB_9
-#define SONAR_ZIPLINE_A PB_10
-#define SONAR_ZIPLINE_B PB_11
-// PB 12 & 13 for sonar sensor
-#define SONAR_CLAW_A PB_14
-#define SONAR_CLAW_B PB_15
+#define HALL PA2
 
+//Reflectance
+#define R1 PB1
+#define R2 PB0
+#define R3 A7
+#define R4 A6
+
+//IR
+#define IR1 PA4
+#define IR2 PA5
+
+//Wheels & H-bridge
+#define MOTOR_L_F PB_6
+#define MOTOR_L_B PB_7
+#define MOTOR_R_F PB_8
+#define MOTOR_R_B PB_9
+
+//Rotary Enc
+#define enc_1 PB3
+#define enc_2 PB4
+
+//Reflectance on the edges
+#define edgeL PA12
+#define edgeR PA15
+
+//Claw sonar sensor
+#define TRIG_PIN PB15
+#define ECHO_PIN PB15
+//servos 
+Servo servoClaw;
+Servo servoJoint;
+Servo servoBase;
+
+
+
+//4 bar linkage
+#define linkL PA8
+#define linkR PA9
+
+///////
 //other constants defined here
+//////
+
+//clawTreasure
+const int CLAWMAX = 150;
+const int BASEMAXDISP = 60;
+const int JOINTMAX = 130;
+
+
+
+//SONAR
+#define MAX_DISTANCE 400
+#define ITERATIONS 5
+#define HUM 40
+#define TEMP 20
+#define ANGLE 30
+
+//HALL
+#define bombThreshold 100
+
+
+#define MOTOR_FREQ 500
+
+//Encoders
+#define PWMFREQ 2000
+#define FWD_SPEED 885
+#define BACK_SPEED 885
+
+
+// from Zephko:
+#define ENC_R_FWD 61
+#define ENC_L_FWD 61
+#define ENC_STRAIGHT_SPEED 890

@@ -1,4 +1,4 @@
-#include <Arduino.h>
+
 #include "const.h"
 #include "Encoders.h"
 #define MOTOR_R_CW PA_2
