@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <Adafruit_SSD1306.h>
 #include <Servo.h>
+#include <NewPing.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -47,6 +48,13 @@
 //Claw sonar sensor
 #define TRIG_PIN PB15
 #define ECHO_PIN PB15
+//SONAR CONSTS
+#define MAX_DISTANCE 400
+#define ITERATIONS 5
+#define HUM 40
+#define TEMP 20
+#define ANGLE 30
+NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
 //4 bar linkage
 #define linkL PA8
@@ -64,12 +72,6 @@ const int CLAWMAX = 150;
 const int BASEMAXDISP = 60;
 const int JOINTMAX = 130;
 
-//SONAR
-#define MAX_DISTANCE 400
-#define ITERATIONS 5
-#define HUM 40
-#define TEMP 20
-#define ANGLE 30
 
 //HALL
 #define bombThreshold 100

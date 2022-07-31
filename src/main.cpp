@@ -41,5 +41,7 @@ void setup() {
 }
 
 void loop(){
+
+  // adjust the second variable (e.g "30" here) and it is the position of the base from 90 deg (centre)
   detecting(soundcm, 30);
 }

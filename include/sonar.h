@@ -1,8 +1,5 @@
 #include "const.h"
 #include "claw.h"
-#include <NewPing.h>
-
-NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
 float getSoundSpeed(){
     //sound speed in m/s
