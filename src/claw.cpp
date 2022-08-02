@@ -1,15 +1,24 @@
+#ifndef CLAW_C
+#define CLAW_C
+
 #include "const.h"
 #include "claw.h"
 
-//servos 
-Servo servoClaw;
-Servo servoJoint;
-Servo servoBase;
-const int CLAWMAX = 150;
-const int BASEMAXDISP = 60;
-const int JOINTMAX = 130;
+#define CLAWMAX 150
+#define ASEMAXDISP 60
+#define JOINTMAX 130
 
-void clawSetup() {
+Claw::Claw(Servo servoClaww, Servo servoJointt, Servo servoBasee) {
+  servoClaw = servoClaww;
+  servoJoint = servoJointt;
+  servoBase = servoBasee;
+}
+
+Claw::Claw(){
+
+}
+
+void Claw::clawSetup() {
   servoJoint.write(180);
   servoClaw.attach(SERVOCLAW);
   servoJoint.attach(SERVOJOINT);
@@ -20,7 +29,7 @@ void clawSetup() {
 
 };
 
-void rotateZero(int base_current_pos){
+void Claw::rotateZero(int base_current_pos){
     
     if(base_current_pos<90){
         while(base_current_pos<90){
@@ -41,7 +50,7 @@ void rotateZero(int base_current_pos){
 
 
 //returns current position
-int baseRotate(int base_target_pos, int base_current_pos){
+int Claw::baseRotate(int base_target_pos, int base_current_pos){
     if (base_current_pos< base_target_pos){
         while(base_current_pos < base_target_pos){
             servoBase.write(base_current_pos);
@@ -60,7 +69,7 @@ int baseRotate(int base_target_pos, int base_current_pos){
     return base_current_pos;
 }
 
-void clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipline2 = 2
+void Claw::clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipline2 = 2
     int joint_pos;
     if(state == 1){
         for(joint_pos = 0; joint_pos < JOINTMAX; joint_pos +=1){
@@ -83,7 +92,7 @@ void clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipline2 = 
 }
 
 //pinion
-void ForwardStep(float distancecm) 
+void Claw::ForwardStep(float distancecm) 
 {
   digitalWrite(dir, HIGH);
   int stepNum = distancecm*320;
@@ -95,7 +104,7 @@ void ForwardStep(float distancecm)
   }
 }
 
-void BackwardStep(float distancecm) 
+void Claw::BackwardStep(float distancecm) 
 {
   digitalWrite(dir, LOW);
   int stepNum = distancecm*320;
@@ -108,7 +117,7 @@ void BackwardStep(float distancecm)
 }
 
 // returns safe = 1 to pick up treasure; if its bomb, claw won't pick up
-int bomb(){
+int Claw::bomb(){
   int state = analogRead(HALL);
   int safe = 1;
   if (state < bombThreshold) { //bomb
@@ -120,7 +129,7 @@ int bomb(){
   return safe;
 }
 
-void clawPickUp(int current_base_pos){ //sonar successfully detects treasure
+void Claw::clawPickUp(int current_base_pos){ //sonar successfully detects treasure
 
     //close claw
     for (int claw_pos = CLAWMAX; claw_pos > 0; claw_pos -= 1) { 
@@ -149,3 +158,5 @@ void clawPickUp(int current_base_pos){ //sonar successfully detects treasure
     //return to rack original position
     BackwardStep(7.5);
 }
+
+#endif
