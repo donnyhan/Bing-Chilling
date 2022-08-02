@@ -5,9 +5,8 @@
 #include <const.h>
 #include <pinSetup.h>
 #include <Encoders.h>
-#include <sonar.cpp>
-
-#include <claw.cpp>
+#include <sonar.h>
+#include <claw.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -18,9 +17,9 @@ float soundcm;
 
 void setup() {
 
-  clawSetup();
-  pinSetup();
-  soundcm = getSoundSpeed();
+  //clawSetup();
+  //pinSetup();
+  //soundcm = getSoundSpeed();
   
   // put your setup code here, to run once:
   display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
@@ -34,5 +33,5 @@ void setup() {
 }
 
 void loop(){
-  detecting(soundcm, 30);
+  //detecting(soundcm, 30);
 }
