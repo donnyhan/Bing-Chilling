@@ -5,6 +5,8 @@
 #include <const.h>
 #include <pinSetup.h>
 #include <Encoders.h>
+#include <claw.h>
+#include <sonar.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -24,6 +26,10 @@ void setup() {
   pinSetup();
  
   attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
+
+  Claw::initializeClaw(&servoClaw);
+  Claw::initializeBase(&servoBase);
+  Claw::initializeJoint(&servoJoint);
 
   display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display_handler.clearDisplay();

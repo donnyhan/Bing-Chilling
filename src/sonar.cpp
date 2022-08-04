@@ -6,11 +6,7 @@
 #include "claw.h"
 #include <NewPing.h>
 
-NewPing* sonar_ptr;
-
-Sonar::Sonar(Claw claww) {
-  claw = claww;
-}
+NewPing* Sonar::sonar_ptr;
 
 void Sonar::initializeSonar(NewPing* _sonar){
     sonar_ptr = _sonar;
@@ -41,21 +37,21 @@ void Sonar::detecting(float soundcm, int targ_base_pos) { //target base position
      
 
      while(treasure ==0){
-        int base_pos = claw.baseRotate(targ_base_pos, 90);
+        int base_pos = Claw::baseRotate(targ_base_pos, 90);
         distance = getDist(soundcm);
 
         if (distance < 20){
             //Robot stops moving (wheel speed zero) 
-            base_pos = claw.baseRotate(targL, base_pos);
+            base_pos = Claw::baseRotate(targL, base_pos);
             distanceL = getDist(soundcm);
 
-            base_pos = claw.baseRotate(targ_base_pos-10, base_pos);
+            base_pos = Claw::baseRotate(targ_base_pos-10, base_pos);
             distanceL2 = getDist(soundcm);
 
-            base_pos = claw.baseRotate(targ_base_pos+10, base_pos);
+            base_pos = Claw::baseRotate(targ_base_pos+10, base_pos);
             distanceR2 = getDist(soundcm);
 
-            base_pos = claw.baseRotate(targR, base_pos);
+            base_pos = Claw::baseRotate(targR, base_pos);
             distanceR = getDist(soundcm);
 
             if((distanceL-distance)>= 6 && (distanceR-distance >= 6)){ // it's a potential treasure
@@ -63,9 +59,9 @@ void Sonar::detecting(float soundcm, int targ_base_pos) { //target base position
                 // rack extends until the IR sensor no longer detects a signal as the idle is between the claw
                 // check the hall effect sensor
                 int treasure_pos = base_pos;
-                if( claw.bomb() ==1 ){// trasure, claw picks up
-                    claw.ForwardStep(9);
-                    claw.clawPickUp(treasure_pos);
+                if( Claw::bomb() ==1 ){// trasure, claw picks up
+                    Claw::ForwardStep(9);
+                    Claw::clawPickUp(treasure_pos);
                 }
                 else{
                     //claw don't pick up

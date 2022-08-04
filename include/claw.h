@@ -6,19 +6,21 @@ class Claw
 {
 public:
 
-    Claw();
-    void clawSetup();
-    void initializeClaw(Servo* _claw_servo);
-    void initializeJoint(Servo* _joint_servo);
-    void initializeBase(Servo* _base_servo);
-    void rotateZero(int base_current_pos);
-    int baseRotate(int base_target_pos, int base_current_pos);
-    void clawJoint(int state);
-    void clawPickUp(int base_pos);
-    void ForwardStep(float distancecm);
-    void BackwardStep(float distancecm);
-    int getBasePos(int base_pos); //???
-    int bomb();
+    static Servo* claw_servo_ptr;
+    static Servo* joint_servo_ptr;
+    static Servo* base_servo_ptr;
+    static void clawSetup();
+    static void initializeClaw(Servo* _claw_servo);
+    static void initializeJoint(Servo* _joint_servo);
+    static void initializeBase(Servo* _base_servo);
+    static void rotateZero(int base_current_pos);
+    static int baseRotate(int base_target_pos, int base_current_pos);
+    static void clawJoint(int state);
+    static void clawPickUp(int base_pos);
+    static void ForwardStep(float distancecm);
+    static void BackwardStep(float distancecm);
+    static int getBasePos(int base_pos); //???
+    static int bomb();
 };
 
 #endif

@@ -7,12 +7,11 @@
 class Sonar
 {
 public:
-    Sonar(Claw claww);
-    void initializeSonar(NewPing* _sonar);
-    float getDist(float soundcm);
-    float getSoundSpeed();
-    void detecting(float soundcm, int targ_base_pos);
-    Claw claw;
+    static NewPing* sonar_ptr;
+    static void initializeSonar(NewPing* _sonar);
+    static float getDist(float soundcm);
+    static float getSoundSpeed();
+    static void detecting(float soundcm, int targ_base_pos);
 };
 
 #endif

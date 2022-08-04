@@ -2,30 +2,22 @@
 #define CLAW_C
 
 #include "const.h"
-#include "claw.h"
+#include <claw.h>
 
-#define CLAWMAX 150
-#define ASEMAXDISP 60
-#define JOINTMAX 130
-
-Claw::Claw(){}
-
-Servo* claw_servo_ptr;
-Servo* joint_servo_ptr;
-Servo* base_servo_ptr;
-
-
+Servo* Claw::claw_servo_ptr;
+Servo* Claw::joint_servo_ptr;
+Servo* Claw::base_servo_ptr;
 
 void Claw::initializeClaw(Servo* _claw_servo){
-    claw_servo_ptr = _claw_servo;
+    Claw::claw_servo_ptr = _claw_servo;
 }
 
 void Claw::initializeJoint(Servo* _joint_servo){
-    joint_servo_ptr = _joint_servo;
+    Claw::joint_servo_ptr = _joint_servo;
 }
 
 void Claw::initializeBase(Servo* _base_servo){
-    base_servo_ptr = _base_servo;
+    Claw::base_servo_ptr = _base_servo;
 }
 
 
