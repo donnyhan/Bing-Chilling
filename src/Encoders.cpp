@@ -11,11 +11,10 @@
 #define FWD_SPEED 885
 #define BACK_SPEED 885
 
-Encoders::Encoders(SensorArray sensor_arr)
+Encoders::Encoders()
 {
   countL = 0;
   countR = 0;
-  sensor_array = sensor_arr;
 }
 
 void Encoders::handle_L_interrupt()

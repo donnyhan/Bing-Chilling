@@ -5,7 +5,6 @@
 class Claw
 {
 public:
-    Claw(Servo servoClaww, Servo servoJointt, Servo servoBasee);
     Claw();
     void clawSetup();
     void rotateZero(int base_current_pos);

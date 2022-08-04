@@ -4,7 +4,7 @@
 class Encoders
 {
 public:
-    Encoders(SensorArray sensor_arr);
+    Encoders();
     void handle_R_interrupt();
     void handle_L_interrupt();
     void drive(int leftStop, int rightStop,int speedL,int speedR);
@@ -18,5 +18,4 @@ public:
     void adjustmentBackupCount(int counts);
     volatile int countL;
     volatile int countR;
-    SensorArray sensor_array;
 };
