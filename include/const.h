@@ -38,8 +38,8 @@
 #define MOTOR_R_B PB_9
 
 //Rotary Enc
-#define enc_1 PB3
-#define enc_2 PB4
+#define enc_L PB3
+#define enc_R PB4
 
 //Reflectance on the edges
 #define edgeL PA12
@@ -81,9 +81,9 @@ const int JOINTMAX = 130;
 #define MOTOR_FREQ 500
 
 //Encoders
-#define PWMFREQ 2000
-#define FWD_SPEED 885
-#define BACK_SPEED 885
+#define PWMFREQ 200
+#define FWD_SPEED 300
+#define BACK_SPEED 300
 
 
 // from Zephko:

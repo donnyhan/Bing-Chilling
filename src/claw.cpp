@@ -8,11 +8,6 @@
 #define ASEMAXDISP 60
 #define JOINTMAX 130
 
-Claw::Claw(Servo servoClaww, Servo servoJointt, Servo servoBasee) {
-  servoClaw = servoClaww;
-  servoJoint = servoJointt;
-  servoBase = servoBasee;
-}
 
 Claw::Claw(){
 

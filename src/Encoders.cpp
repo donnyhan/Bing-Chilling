@@ -1,11 +1,10 @@
 #include "const.h"
 #include "Encoders.h"
 
-Encoders::Encoders(SensorArray sensor_arr)
+Encoders::Encoders()
 {
   countL = 0;
   countR = 0;
-  sensor_array = sensor_arr;
 }
 
 void Encoders::handle_L_interrupt()
