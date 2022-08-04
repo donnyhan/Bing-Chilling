@@ -6,17 +6,18 @@
 #include "claw.h"
 #include <NewPing.h>
 
-NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+NewPing* sonar_ptr;
 
 Sonar::Sonar(Claw claww) {
   claw = claww;
-  servoClaw = claww.servoClaw;
-  servoJoint = claww.servoJoint;
-  servoBase = claww.servoBase;
+}
+
+void Sonar::initializeSonar(NewPing* _sonar){
+    sonar_ptr = _sonar;
 }
 
 float Sonar::getDist(float soundcm){
-    float dur = sonar.ping_median(ITERATIONS);
+    float dur = sonar_ptr->ping_median(ITERATIONS);
     float dist = (dur/200)*soundcm;
     return dist;
 }
@@ -38,7 +39,6 @@ void Sonar::detecting(float soundcm, int targ_base_pos) { //target base position
      int targL = targ_base_pos - ANGLE;
      int targR = targ_base_pos + ANGLE;
      
-     servoBase.write(90);
 
      while(treasure ==0){
         int base_pos = claw.baseRotate(targ_base_pos, 90);

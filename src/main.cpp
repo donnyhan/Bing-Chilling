@@ -18,6 +18,7 @@ Encoders encoders1 = Encoders();
 Servo servoClaw;
 Servo servoJoint;
 Servo servoBase;
+NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
 void setup() {
   pinSetup();

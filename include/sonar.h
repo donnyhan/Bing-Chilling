@@ -8,6 +8,7 @@ class Sonar
 {
 public:
     Sonar(Claw claww);
+    void initializeSonar(NewPing* _sonar);
     float getDist(float soundcm);
     float getSoundSpeed();
     void detecting(float soundcm, int targ_base_pos);

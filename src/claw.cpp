@@ -8,35 +8,40 @@
 #define ASEMAXDISP 60
 #define JOINTMAX 130
 
+Claw::Claw(){}
 
-Claw::Claw(){
+Servo* claw_servo_ptr;
+Servo* joint_servo_ptr;
+Servo* base_servo_ptr;
 
-void initializeClaw(Servo* _claw_servo){
+
+
+void Claw::initializeClaw(Servo* _claw_servo){
     claw_servo_ptr = _claw_servo;
 }
 
-void initializeJoint(Servo* _joint_servo){
+void Claw::initializeJoint(Servo* _joint_servo){
     joint_servo_ptr = _joint_servo;
 }
 
-void initializeBase(Servo* _base_servo){
+void Claw::initializeBase(Servo* _base_servo){
     base_servo_ptr = _base_servo;
 }
 
 
 
-}
+
 
 void Claw::clawSetup() {
   joint_servo_ptr->write(180);
   claw_servo_ptr->attach(SERVOCLAW);
-  servoJoint.attach(SERVOJOINT);
-  servoBase.attach(SERVOBASE);
-  servoClaw.write(CLAWMAX);
-  servoBase.write(90);
+  joint_servo_ptr->attach(SERVOJOINT);
+  base_servo_ptr->attach(SERVOBASE);
+  claw_servo_ptr->write(CLAWMAX);
+  base_servo_ptr->write(90);
   delay(1000);
 
-};
+}
 
 void Claw::rotateZero(int base_current_pos){
     
@@ -62,14 +67,14 @@ void Claw::rotateZero(int base_current_pos){
 int Claw::baseRotate(int base_target_pos, int base_current_pos){
     if (base_current_pos< base_target_pos){
         while(base_current_pos < base_target_pos){
-            servoBase.write(base_current_pos);
+            base_servo_ptr->write(base_current_pos);
             base_current_pos++;
             delay(20);
         }
     }
     else if(base_current_pos>base_target_pos){
         while(base_current_pos>base_target_pos){
-            servoBase.write(base_current_pos);
+            base_servo_ptr->write(base_current_pos);
             base_current_pos--;
             delay(20);
         }
@@ -82,19 +87,19 @@ void Claw::clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipli
     int joint_pos;
     if(state == 1){
         for(joint_pos = 0; joint_pos < JOINTMAX; joint_pos +=1){
-            servoJoint.write(180-joint_pos);
+            joint_servo_ptr->write(180-joint_pos);
             delay(20);
         }
     }
     else if (state ==0){
         for (joint_pos = JOINTMAX; joint_pos > 0; joint_pos -= 1) { 
-            servoJoint.write(180-joint_pos);        
+            joint_servo_ptr->write(180-joint_pos);        
             delay(10);  
         }  
     }
     else{
         for(joint_pos = 0; joint_pos < 90; joint_pos+= 1 ){
-            servoJoint.write(180-joint_pos);
+            joint_servo_ptr->write(180-joint_pos);
             delay(10);
         }
     }
@@ -142,7 +147,7 @@ void Claw::clawPickUp(int current_base_pos){ //sonar successfully detects treasu
 
     //close claw
     for (int claw_pos = CLAWMAX; claw_pos > 0; claw_pos -= 1) { 
-        servoClaw.write(claw_pos);
+        claw_servo_ptr->write(claw_pos);
         delay(10);
     } 
 
@@ -157,7 +162,7 @@ void Claw::clawPickUp(int current_base_pos){ //sonar successfully detects treasu
 
     //open claw
     for (int claw_pos = 0; claw_pos <= CLAWMAX; claw_pos += 1) { 
-        servoClaw.write(claw_pos);
+        claw_servo_ptr->write(claw_pos);
         delay(10);         
     }
 

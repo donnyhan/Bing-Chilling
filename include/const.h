@@ -54,7 +54,7 @@
 #define HUM 40
 #define TEMP 20
 #define ANGLE 30
-NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+
 
 //4 bar linkage
 #define linkL PA8

@@ -5,9 +5,7 @@
 class Claw
 {
 public:
-    Servo* claw_servo_ptr;
-    Servo* joint_servo_ptr;
-    Servo* base_servo_ptr;
+
     Claw();
     void clawSetup();
     void initializeClaw(Servo* _claw_servo);
