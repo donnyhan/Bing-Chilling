@@ -25,13 +25,13 @@ void Claw::initializeBase(Servo* _base_servo){
 
 
 void Claw::clawSetup() {
-  joint_servo_ptr->write(180);
   claw_servo_ptr->attach(SERVOCLAW);
-  joint_servo_ptr->attach(SERVOJOINT);
-  base_servo_ptr->attach(SERVOBASE);
   claw_servo_ptr->write(CLAWMAX);
+  joint_servo_ptr->attach(SERVOJOINT);
+  joint_servo_ptr->write(180);
+  base_servo_ptr->attach(SERVOBASE);
   base_servo_ptr->write(90);
-  delay(1000);
+  delay(4000);
 
 }
 
@@ -41,15 +41,17 @@ void Claw::rotateZero(int base_current_pos){
         while(base_current_pos<90){
             base_servo_ptr->write(base_current_pos);
             base_current_pos++;
+            delay(20);
         }
-        delay(30);
+        
     }
     else if(base_current_pos>90){
         while(base_current_pos>90){
             base_servo_ptr->write(base_current_pos);
             base_current_pos--;
+            delay(20);
         }
-        delay(30);
+        
     }
     else{}
 }
@@ -101,11 +103,11 @@ void Claw::clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipli
 void Claw::ForwardStep(float distancecm) 
 {
   digitalWrite(dir, HIGH);
-  int stepNum = distancecm*320;
+  int stepNum = distancecm*340;
   for(int y=0; y<stepNum; y++)
   {
     digitalWrite(stp,HIGH); //Trigger one step
-    delay(2);
+    delay(1);
     digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
   }
 }
@@ -113,11 +115,11 @@ void Claw::ForwardStep(float distancecm)
 void Claw::BackwardStep(float distancecm) 
 {
   digitalWrite(dir, LOW);
-  int stepNum = distancecm*320;
+  int stepNum = distancecm*340;
   for(int y=0; y<stepNum; y++)
   {
     digitalWrite(stp,HIGH); //Trigger one step
-    delay(2);
+    delay(1);
     digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
   }
 }

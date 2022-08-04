@@ -38,6 +38,8 @@ void setup() {
   display_handler.setCursor(0,0);
   display_handler.display();
 
+  Claw::clawSetup();
+
   delay(500);
   
   pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
@@ -45,21 +47,29 @@ void setup() {
 
 }
 
-void loop(){
-  int countR = 0;
-  int value = 0;
-  display_handler.clearDisplay();
-  display_handler.setCursor(0,0);
+// void loop(){
+//   int countR = 0;
+//   int value = 0;
+//   display_handler.clearDisplay();
+//   display_handler.setCursor(0,0);
 
-  countR = encoders1.countR;
+//   countR = encoders1.countR;
 
-  display_handler.println("countR:");
-  display_handler.println(countR,DEC);
+//   display_handler.println("countR:");
+//   display_handler.println(countR,DEC);
 
-  display_handler.display();
-  delay(200);
+//   display_handler.display();
+//   delay(200);
   
-  }
+//   }
+
+void loop() {
+  Claw::baseRotate(150,90);
+  Claw::baseRotate(30,150);
+  Claw::ForwardStep(9);
+  Claw::clawPickUp(30);
+
+}
 
 void handle_R_interrupt()
 {
