@@ -16,6 +16,9 @@ void pinSetup()
 
     //hall effect
      pinMode(HALL, INPUT);   
+
+     pinMode(enc_L,INPUT_PULLUP);
+     pinMode(enc_R,INPUT_PULLUP);
      
 
 
