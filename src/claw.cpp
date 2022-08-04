@@ -11,11 +11,25 @@
 
 Claw::Claw(){
 
+void initializeClaw(Servo* _claw_servo){
+    claw_servo_ptr = _claw_servo;
+}
+
+void initializeJoint(Servo* _joint_servo){
+    joint_servo_ptr = _joint_servo;
+}
+
+void initializeBase(Servo* _base_servo){
+    base_servo_ptr = _base_servo;
+}
+
+
+
 }
 
 void Claw::clawSetup() {
-  servoJoint.write(180);
-  servoClaw.attach(SERVOCLAW);
+  joint_servo_ptr->write(180);
+  claw_servo_ptr->attach(SERVOCLAW);
   servoJoint.attach(SERVOJOINT);
   servoBase.attach(SERVOBASE);
   servoClaw.write(CLAWMAX);
@@ -28,14 +42,14 @@ void Claw::rotateZero(int base_current_pos){
     
     if(base_current_pos<90){
         while(base_current_pos<90){
-            servoBase.write(base_current_pos);
+            base_servo_ptr->write(base_current_pos);
             base_current_pos++;
         }
         delay(30);
     }
     else if(base_current_pos>90){
         while(base_current_pos>90){
-            servoBase.write(base_current_pos);
+            base_servo_ptr->write(base_current_pos);
             base_current_pos--;
         }
         delay(30);

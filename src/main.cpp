@@ -15,6 +15,10 @@ void handle_R_interrupt();
 
 Encoders encoders1 = Encoders();
 
+Servo servoClaw;
+Servo servoJoint;
+Servo servoBase;
+
 void setup() {
   pinSetup();
  

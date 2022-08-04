@@ -65,9 +65,6 @@ NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and ma
 //////
 
 //clawTreasure
-Servo servoClaw;
-Servo servoJoint;
-Servo servoBase;
 const int CLAWMAX = 150;
 const int BASEMAXDISP = 60;
 const int JOINTMAX = 130;
