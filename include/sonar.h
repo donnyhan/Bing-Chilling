@@ -10,7 +10,7 @@ public:
     static NewPing* sonar_ptr;
     static void initializeSonar(NewPing* _sonar);
     static float getDist(float soundcm);
-    static void detecting(float soundcm, int targ_base_pos);
+    static float detecting(float soundcm, int targ_base_pos);
 };
 
 #endif

@@ -25,14 +25,17 @@ NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and ma
 const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
 const float soundcm = soundc / 100;
 
+HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
+
 void setup() {
   pinSetup();
- 
+  Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
   attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
 
   Claw::initializeClaw(&servoClaw);
   Claw::initializeBase(&servoBase);
   Claw::initializeJoint(&servoJoint);
+  Sonar::initializeSonar(&sonar);
 
   display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display_handler.clearDisplay();
@@ -43,10 +46,11 @@ void setup() {
 
   Claw::clawSetup();
 
-  delay(500);
   
   pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
+
+  Serial2.println("Serial2: 2");
 
 
 }
@@ -76,7 +80,10 @@ void setup() {
 // }
 
 void loop() {
-  Sonar::detecting(soundcm, RIGHTMOST);
+  // float distance = Sonar::detecting(soundcm, LEFTMOST);
+  // Serial2.println(distance);
+  Serial2.println(analogRead(HALL));
+  delay(200);
 }
 
 void handle_R_interrupt()

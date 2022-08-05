@@ -149,7 +149,7 @@ void Claw::clawPickUp(int current_base_pos){ //sonar successfully detects treasu
     rotateZero(current_base_pos);
 
     //rack to depositing position
-    BackwardStep(1.5);
+    BackwardStep(1);
 
     //raise joint
     clawJoint(1);
