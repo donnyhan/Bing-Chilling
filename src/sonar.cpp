@@ -12,13 +12,14 @@ void Sonar::initializeSonar(NewPing* _sonar){
     sonar_ptr = _sonar;
 }
 
+//
 float Sonar::getDist(float soundcm){
     float dur = sonar_ptr->ping_median(ITERATIONS);
     float dist = (dur/200)*soundcm;
     return dist;
 }
 
-void Sonar::detecting(float soundcm, int targ_base_pos) { //target base position is the estimated position
+float Sonar::detecting(float soundcm, int targ_base_pos) { //target base position is the estimated position
 // the arm should be in to get the treasure
 
      int distance=-1, distanceL=-1, distanceR=-1, distanceL2=-1, distanceR2=-1;
@@ -27,12 +28,10 @@ void Sonar::detecting(float soundcm, int targ_base_pos) { //target base position
      const int targL = targ_base_pos - ANGLE;
      const int targR = targ_base_pos + ANGLE;
      
-
-     while(treasure ==0){
-        int base_pos = Claw::baseRotate(targ_base_pos, 90);
+        int base_pos = Claw::baseRotate(targ_base_pos, Claw::base_servo_ptr->read());
         distance = getDist(soundcm);
 
-        if (distance < 18){
+        if (distance < 18 && distance != 0){
             //Robot stops moving (wheel speed zero) 
             if (targL>=LEFTMOST) {
                 base_pos = Claw::baseRotate(targL, base_pos);
@@ -61,14 +60,15 @@ void Sonar::detecting(float soundcm, int targ_base_pos) { //target base position
                 // if( abs(distance-distanceL2)<=7 && abs(distance-distanceR2)<=7){ //it's a treasure
                 // rack extends until the IR sensor no longer detects a signal as the idle is between the claw
                 // check the hall effect sensor
-                int treasure_pos = base_pos;
-                if(Claw::bomb() ==1 ){// trasure, claw picks up
-                    Claw::ForwardStep(9);
+                int treasure_pos = targ_base_pos;
+                Claw::baseRotate(treasure_pos,Claw::base_servo_ptr->read());
+                //if(Claw::bomb() ==1 ){// trasure, claw picks up
+                    Claw::ForwardStep(8.5);
                     Claw::clawPickUp(treasure_pos);
-                }
-                else{
-                    //claw don't pick up
-                }
+                //}
+                //else{
+                    ////claw don't pick up
+                //}
 
                 treasure == 1;
             
@@ -78,8 +78,7 @@ void Sonar::detecting(float soundcm, int targ_base_pos) { //target base position
 
             }
         }
-
-    }
+        return distance;
 
 //    if(treasure==1){
 //     //robot continues to move
