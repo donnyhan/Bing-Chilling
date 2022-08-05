@@ -68,7 +68,8 @@
 const int CLAWMAX = 150;
 const int BASEMAXDISP = 60;
 const int JOINTMAX = 130;
-
+const int LEFTMOST = 90-BASEMAXDISP;
+const int RIGHTMOST = 90+BASEMAXDISP;
 
 //HALL
 #define bombThreshold 100

@@ -22,6 +22,9 @@ Servo servoJoint;
 Servo servoBase;
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
+const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
+const float soundcm = soundc / 100;
+
 void setup() {
   pinSetup();
  
@@ -45,6 +48,7 @@ void setup() {
   pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
 
+
 }
 
 // void loop(){
@@ -63,12 +67,16 @@ void setup() {
   
 //   }
 
-void loop() {
-  Claw::baseRotate(150,90);
-  Claw::baseRotate(30,150);
-  Claw::ForwardStep(9);
-  Claw::clawPickUp(30);
+// void loop() {
+//   Claw::baseRotate(150,90);
+//   Claw::baseRotate(30,150);
+//   Claw::ForwardStep(9);
+//   Claw::clawPickUp(30);
 
+// }
+
+void loop() {
+  Sonar::detecting(soundcm, RIGHTMOST);
 }
 
 void handle_R_interrupt()
