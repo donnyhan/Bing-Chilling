@@ -27,10 +27,11 @@ const float soundcm = soundc / 100;
 
 void setup() {
   pinSetup();
+
  
   attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
 
-  Claw::initializeClaw(&servoClaw);
+    Claw::initializeClaw(&servoClaw);
   Claw::initializeBase(&servoBase);
   Claw::initializeJoint(&servoJoint);
 
@@ -41,13 +42,12 @@ void setup() {
   display_handler.setCursor(0,0);
   display_handler.display();
 
-  Claw::clawSetup();
+    Claw::clawSetup();
 
   delay(500);
   
   pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
-
 
 }
 
