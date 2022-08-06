@@ -29,12 +29,7 @@ HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
 
 void setup() {
   pinSetup();
-<<<<<<< HEAD
-
- 
-=======
   Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
->>>>>>> 6cc692e6d404fd4fd398b52a975acba9868fde3a
   attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
 
     Claw::initializeClaw(&servoClaw);
@@ -55,12 +50,9 @@ void setup() {
   pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
 
-<<<<<<< HEAD
-=======
   Serial2.println("Serial2: 2");
 
 
->>>>>>> 6cc692e6d404fd4fd398b52a975acba9868fde3a
 }
 
 // void loop(){
