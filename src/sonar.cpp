@@ -23,7 +23,6 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
 // the arm should be in to get the treasure
 
      int distance=-1, distanceL=-1, distanceR=-1, distanceL2=-1, distanceR2=-1;
-     int treasure = 0;
      // int curr_base_pos= getBasePos();
      const int targL = targ_base_pos - ANGLE;
      const int targR = targ_base_pos + ANGLE;
@@ -62,15 +61,9 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
                 // check the hall effect sensor
                 int treasure_pos = targ_base_pos;
                 Claw::baseRotate(treasure_pos,Claw::base_servo_ptr->read());
-                //if(Claw::bomb() ==1 ){// trasure, claw picks up
-                    Claw::ForwardStep(8.5);
-                    Claw::clawPickUp(treasure_pos);
-                //}
-                //else{
-                    ////claw don't pick up
-                //}
+                    Claw::moveRack(EXTENDEDPOS);
+                    Claw::clawPickUp(treasure_pos); 
 
-                treasure == 1;
             
                 //else{}
             }
@@ -80,10 +73,6 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
         }
         return distance;
 
-//    if(treasure==1){
-//     //robot continues to move
-//     delay(1000);
-//    }
 }
 
 #endif

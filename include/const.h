@@ -66,10 +66,15 @@
 
 //clawTreasure
 const int CLAWMAX = 150;
-const int BASEMAXDISP = 60;
-const int JOINTMAX = 130;
+const int BASEMAXDISP = 60; //don't change
+const int JOINTMAX = 120;
 const int LEFTMOST = 90-BASEMAXDISP;
 const int RIGHTMOST = 90+BASEMAXDISP;
+
+//rack
+const float RETRACTEDPOS = 0;
+const float EXTENDEDPOS = 8.5;
+const float DEPOSITPOS = 7.5;
 
 //HALL
 #define bombThreshold 100

@@ -32,7 +32,7 @@ void setup() {
   Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
   attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
 
-    Claw::initializeClaw(&servoClaw);
+  Claw::initializeClaw(&servoClaw);
   Claw::initializeBase(&servoBase);
   Claw::initializeJoint(&servoJoint);
   Sonar::initializeSonar(&sonar);

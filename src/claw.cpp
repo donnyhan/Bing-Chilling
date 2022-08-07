@@ -7,6 +7,7 @@
 Servo* Claw::claw_servo_ptr;
 Servo* Claw::joint_servo_ptr;
 Servo* Claw::base_servo_ptr;
+float Claw::rackPosition;
 
 void Claw::initializeClaw(Servo* _claw_servo){
     Claw::claw_servo_ptr = _claw_servo;
@@ -31,6 +32,7 @@ void Claw::clawSetup() {
   joint_servo_ptr->write(180);
   base_servo_ptr->attach(SERVOBASE);
   base_servo_ptr->write(90);
+  rackPosition = 0;
   delay(4000);
 
 }
@@ -110,6 +112,7 @@ void Claw::ForwardStep(float distancecm)
     delay(1);
     digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
   }
+  rackPosition += distancecm;
 }
 
 void Claw::BackwardStep(float distancecm) 
@@ -122,49 +125,83 @@ void Claw::BackwardStep(float distancecm)
     delay(1);
     digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
   }
+  rackPosition -= distancecm;
+}
+
+//fully retracted is 0 and fully extended is 8.5
+void Claw::moveRack(float destinationcm) 
+{
+    float difference = destinationcm - rackPosition;
+    if (difference > 0) {
+        ForwardStep(difference);
+    }
+    else if (difference < 0)
+    {
+        BackwardStep(-difference);
+    }
 }
 
 // returns safe = 1 to pick up treasure; if its bomb, claw won't pick up
-int Claw::bomb(){
-  int state = analogRead(HALL);
-  int safe = 1;
+bool Claw::isBomb(){
+  int state = digitalRead(HALL);
+  bool safe = true;
   if (state < bombThreshold) { //bomb
-    safe = 0;
+    safe = false;
   }
   else { // treasure
   }
-
   return safe;
+}
+
+bool closeClaw() {
+    bool safe = true;
+    for (int claw_pos = CLAWMAX; claw_pos > 0; claw_pos -= 1) { 
+        safe = Claw::isBomb();
+        if (!safe) {
+            break;
+        }
+        Claw::claw_servo_ptr->write(claw_pos);
+        delay(10);
+    } 
+    return safe;
+}
+
+void openClaw() {
+    for (int claw_pos = Claw::claw_servo_ptr->read(); claw_pos <= CLAWMAX; claw_pos += 1) { 
+        Claw::claw_servo_ptr->write(claw_pos);
+        delay(10);         
+    }
 }
 
 void Claw::clawPickUp(int current_base_pos){ //sonar successfully detects treasure
 
     //close claw
-    for (int claw_pos = CLAWMAX; claw_pos > 0; claw_pos -= 1) { 
-        claw_servo_ptr->write(claw_pos);
-        delay(10);
-    } 
-
-    //centre the base
-    rotateZero(current_base_pos);
-
-    //rack to depositing position
-    BackwardStep(1);
-
-    //raise joint
-    clawJoint(1);
-
-    //open claw
-    for (int claw_pos = 0; claw_pos <= CLAWMAX; claw_pos += 1) { 
-        claw_servo_ptr->write(claw_pos);
-        delay(10);         
-    }
-
-    //lower joint
-    clawJoint(0);
+    bool safe = closeClaw();
     
-    //return to rack original position
-    BackwardStep(7.5);
+    if (safe) {
+        //centre the base
+        rotateZero(current_base_pos);
+
+        //rack to depositing position
+        moveRack(DEPOSITPOS);
+
+        //raise joint
+        clawJoint(1);
+
+        //open claw
+        openClaw();
+
+        //lower joint
+        clawJoint(0);
+        
+        //return to rack original position
+        moveRack(RETRACTEDPOS);
+    }
+    else {
+        openClaw();
+        moveRack(RETRACTEDPOS);
+        rotateZero(current_base_pos);
+    }
 }
 
 #endif
