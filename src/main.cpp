@@ -33,26 +33,22 @@ HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
 
 void setup() {
   pinSetup();
-  //Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
-  //attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
+  Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
+  attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
 
   Claw::initializeClaw(&servoClaw);
   Claw::initializeBase(&servoBase);
   Claw::initializeJoint(&servoJoint);
   Sonar::initializeSonar(&sonar);
 
-  Linkage::initializeLink1(&servoLinkL);
-  Linkage::initializeLink2(&servoLinkR);
+  display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display_handler.clearDisplay();
+  display_handler.setTextSize(1);
+  display_handler.setTextColor(SSD1306_WHITE);
+  display_handler.setCursor(0,0);
+  display_handler.display();
 
-  // display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  // display_handler.clearDisplay();
-  // display_handler.setTextSize(1);
-  // display_handler.setTextColor(SSD1306_WHITE);
-  // display_handler.setCursor(0,0);
-  // display_handler.display();
-
-  //Claw::clawSetup();
-  Linkage:: linkageSetup();
+    Claw::clawSetup();
 
   
   //pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
@@ -87,15 +83,11 @@ void setup() {
 
 // }
 
-// void loop() {
-//   // float distance = Sonar::detecting(soundcm, LEFTMOST);
-//   // Serial2.println(distance);
-//   Serial2.println(analogRead(HALL));
-//   delay(200);
-// }
-
-void loop(){
-  Linkage::liftBox();
+void loop() {
+  // float distance = Sonar::detecting(soundcm, LEFTMOST);
+  // Serial2.println(distance);
+  Serial2.println(analogRead(HALL));
+  delay(200);
 }
 
 void handle_R_interrupt()
