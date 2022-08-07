@@ -21,6 +21,7 @@ public:
     static void tp_motor_straight();
     static void tp_motor_offtape();
     static void tp_motor_stop();
+    static void edges();
 };
 
 #endif
