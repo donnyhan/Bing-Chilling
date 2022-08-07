@@ -42,6 +42,25 @@ void Linkage::liftBox(){
     delay(5000);
 }
 
+void Linkage::dropRamp(){
+    int turn = 100;
+
+    for (int posi = 0; pos <= turn; posi += 1) { 
+        // in steps of 1 degree
+        linkage_servo_ptr_1->write(posi);
+        linkage_servo_ptr_2->write(posi);
+        delay(30);
+    }
+    delay(2000);
+     for (int posi = turn; posi >= 0; posi -= 1) { 
+        linkage_servo_ptr_1->write(posi);
+        linkage_servo_ptr_2->write(posi);
+        delay(30);                      
+    }
+
+
+}
+
 
 
 #endif

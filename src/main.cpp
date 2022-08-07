@@ -7,11 +7,12 @@
 #include <Encoders.h>
 #include <claw.h>
 #include <sonar.h>
+#include <linkage.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 #define OLED_RESET     -1 // This display does not have a reset pin accessible
-Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+//Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void handle_R_interrupt();
 
@@ -22,6 +23,9 @@ Servo servoJoint;
 Servo servoBase;
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
+Servo servoLinkL;
+Servo servoLinkR;
+
 const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
 const float soundcm = soundc / 100;
 
@@ -29,28 +33,32 @@ HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
 
 void setup() {
   pinSetup();
-  Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
-  attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
+  //Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
+  //attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
 
-    Claw::initializeClaw(&servoClaw);
+  Claw::initializeClaw(&servoClaw);
   Claw::initializeBase(&servoBase);
   Claw::initializeJoint(&servoJoint);
   Sonar::initializeSonar(&sonar);
 
-  display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  display_handler.clearDisplay();
-  display_handler.setTextSize(1);
-  display_handler.setTextColor(SSD1306_WHITE);
-  display_handler.setCursor(0,0);
-  display_handler.display();
+  Linkage::initializeLink1(&servoLinkL);
+  Linkage::initializeLink2(&servoLinkR);
 
-    Claw::clawSetup();
+  // display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  // display_handler.clearDisplay();
+  // display_handler.setTextSize(1);
+  // display_handler.setTextColor(SSD1306_WHITE);
+  // display_handler.setCursor(0,0);
+  // display_handler.display();
+
+  //Claw::clawSetup();
+  Linkage:: linkageSetup();
 
   
-  pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
-  pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
+  //pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
+  //pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
 
-  Serial2.println("Serial2: 2");
+  //Serial2.println("Serial2: 2");
 
 
 }
@@ -79,11 +87,15 @@ void setup() {
 
 // }
 
-void loop() {
-  // float distance = Sonar::detecting(soundcm, LEFTMOST);
-  // Serial2.println(distance);
-  Serial2.println(analogRead(HALL));
-  delay(200);
+// void loop() {
+//   // float distance = Sonar::detecting(soundcm, LEFTMOST);
+//   // Serial2.println(distance);
+//   Serial2.println(analogRead(HALL));
+//   delay(200);
+// }
+
+void loop(){
+  Linkage::liftBox();
 }
 
 void handle_R_interrupt()

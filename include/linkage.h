@@ -12,6 +12,7 @@ public:
     static void initializeLink2(Servo* linkage_servo2);
     static void linkageSetup();
     static void liftBox(); //lift the box up
+    static void dropRamp();
     // static void returnBox();
 };
 
