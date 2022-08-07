@@ -19,13 +19,13 @@
 #define SERVOJOINT PA10
 #define SERVOBASE PA0
 
-#define HALL PA7 //change for final
+#define HALL PA11 //change for final
 
 //Reflectance
-#define R1 PB1
-#define R2 PB0
-#define R3 A7
-#define R4 A6
+#define R_L_Sensor PA6
+#define R_R_Sensor PA7
+#define R_L_Sensor_2 PA2
+#define R_R_Sensor_2 PA3
 
 //IR
 #define IR1 PA4
@@ -73,6 +73,14 @@ const int RIGHTMOST = 90+BASEMAXDISP;
 
 //HALL
 #define bombThreshold 100
+
+//TAPE FOLLOWING
+#define BASE_SPEED 300
+#define RR_Threshold 38
+#define RL_Threshold 84
+#define CW_Threshold 500
+#define RL2_Threshold 100
+#define RR2_Threshold 100
 
 
 
