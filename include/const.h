@@ -19,7 +19,7 @@
 #define SERVOJOINT PA10
 #define SERVOBASE PA0
 
-#define HALL PA11 //change for final
+#define HALL PA7 //change for final
 
 //Reflectance
 #define R_L_Sensor PA6

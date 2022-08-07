@@ -55,8 +55,8 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
 
             if(((distanceL-distance)>= 6 && (distanceR-distance >= 6)) || 
             ((distanceL-distance) >= 6 && (distanceR == -1)) ||
-            ((distanceR-distance) >= 6 && (distanceL == -1))) { // it's a potential treasure
-                // if( abs(distance-distanceL2)<=7 && abs(distance-distanceR2)<=7){ //it's a treasure
+            ((distanceR-distance) >= 6 && (distanceL == -1))) { 
+                //if( abs(distance-distanceL2)<=5 || abs(distance-distanceR2)<=5){ 
                 // rack extends until the IR sensor no longer detects a signal as the idle is between the claw
                 // check the hall effect sensor
                 int treasure_pos = targ_base_pos;

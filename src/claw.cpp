@@ -142,33 +142,52 @@ void Claw::moveRack(float destinationcm)
 }
 
 // returns safe = 1 to pick up treasure; if its bomb, claw won't pick up
-bool Claw::isBomb(){
+int Claw::isBomb(){
   int state = digitalRead(HALL);
-  bool safe = true;
-  if (state < bombThreshold) { //bomb
-    safe = false;
+  int bomb = 0;
+  if (state = 0) { //bomb
+    bomb = 1;
   }
   else { // treasure
   }
-  return safe;
+  return bomb;
 }
 
-bool closeClaw() {
-    bool safe = true;
+int Claw::closeClaw() {
+    int safe = 1;
     for (int claw_pos = CLAWMAX; claw_pos > 0; claw_pos -= 1) { 
-        safe = Claw::isBomb();
-        if (!safe) {
+        if (isBomb() == 1) {
+            safe =0;
+        }
+        Serial2.println(safe);
+        Serial2.println(!safe);
+        if (safe ==0) {
+            Serial2.println("should break");
             break;
         }
-        Claw::claw_servo_ptr->write(claw_pos);
+        claw_servo_ptr->write(claw_pos);
         delay(10);
     } 
     return safe;
+
+    // bool safe = true;
+    // for (int claw_pos = CLAWMAX; claw_pos > 20; claw_pos -= 1) { 
+    //     claw_servo_ptr->write(claw_pos);
+    //     delay(10);
+    // } 
+    // safe = !isBomb();
+    // if (safe) {
+    //     for (int claw_pos = 20; claw_pos > 0; claw_pos -= 1) { 
+    //     claw_servo_ptr->write(claw_pos);
+    //     delay(10);
+    // } 
+    // }
+    // return safe;
 }
 
-void openClaw() {
-    for (int claw_pos = Claw::claw_servo_ptr->read(); claw_pos <= CLAWMAX; claw_pos += 1) { 
-        Claw::claw_servo_ptr->write(claw_pos);
+void Claw::openClaw() {
+    for (int claw_pos = claw_servo_ptr->read(); claw_pos <= CLAWMAX; claw_pos += 1) { 
+        claw_servo_ptr->write(claw_pos);
         delay(10);         
     }
 }
@@ -176,9 +195,9 @@ void openClaw() {
 void Claw::clawPickUp(int current_base_pos){ //sonar successfully detects treasure
 
     //close claw
-    bool safe = closeClaw();
+    int safe = closeClaw();
     
-    if (safe) {
+    if (safe == 1) {
         //centre the base
         rotateZero(current_base_pos);
 

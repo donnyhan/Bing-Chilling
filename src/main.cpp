@@ -29,6 +29,8 @@ HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
 
 void setup() {
   pinSetup();
+  pinMode(PB2, OUTPUT);
+  digitalWrite(PB2, HIGH);
   Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
   attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
 
@@ -43,6 +45,8 @@ void setup() {
   display_handler.setTextColor(SSD1306_WHITE);
   display_handler.setCursor(0,0);
   display_handler.display();
+
+  
 
     Claw::clawSetup();
 
@@ -80,9 +84,10 @@ void setup() {
 // }
 
 void loop() {
-  // float distance = Sonar::detecting(soundcm, LEFTMOST);
+  float distance = Sonar::detecting(soundcm, LEFTMOST);
+  //Serial2.println(digitalRead(HALL));
   // Serial2.println(distance);
-  Serial2.println(analogRead(HALL));
+    // Serial2.println(analogRead(HALL)); 
   delay(200);
 }
 
