@@ -68,4 +68,28 @@ pwm_start(MOTOR_L_F, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
 pwm_start(MOTOR_L_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
 }
 
+void Tape::edges(){
+  int leftEdge, rightEdge;
+
+  leftEdge = digitalRead(edgeL);
+  rightEdge = digitalRead(edgeR);
+
+  if(leftEdge == 0 && rightEdge ==1 ){
+    //motor moves back a bit and to the right
+  }
+
+  if (rightEdge ==0 && leftEdge ==1){
+    //motor moves back a bit and to the left
+  }
+
+  if(rightEdge ==1 && leftEdge ==1){
+    //robot moves straight 
+  }
+
+  if(rightEdge == 0 && leftEdge ==0){
+    //moves back
+  }
+
+}
+
 #endif
