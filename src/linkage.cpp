@@ -45,7 +45,7 @@ void Linkage::liftBox(){
 void Linkage::dropRamp(){
     int turn = 100;
 
-    for (int posi = 0; pos <= turn; posi += 1) { 
+    for (int posi = 0; posi <= turn; posi += 1) { 
         // in steps of 1 degree
         linkage_servo_ptr_1->write(posi);
         linkage_servo_ptr_2->write(posi);

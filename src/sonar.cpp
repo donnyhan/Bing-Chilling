@@ -77,8 +77,6 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
  
 }
 
-void Sonar::findBeacon(float soundcm){
-    
-}
+
 
 #endif

@@ -12,9 +12,9 @@
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 #define OLED_RESET     -1 // This display does not have a reset pin accessible
-//Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-void handle_R_interrupt();
+void handle_L_interrupt();
 
 Encoders encoders1 = Encoders();
 
@@ -22,6 +22,7 @@ Servo servoClaw;
 Servo servoJoint;
 Servo servoBase;
 NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
+NewPing backSonar(BACK_TRIG_PIN,BACK_ECHO_PIN,MAX_DISTANCE);
 
 Servo servoLinkL;
 Servo servoLinkR;
@@ -34,12 +35,12 @@ HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
 void setup() {
   pinSetup();
   Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
-  attachInterrupt(digitalPinToInterrupt(enc_R), handle_R_interrupt, FALLING);
+  attachInterrupt(digitalPinToInterrupt(enc_L), handle_L_interrupt, FALLING);
 
   Claw::initializeClaw(&servoClaw);
   Claw::initializeBase(&servoBase);
   Claw::initializeJoint(&servoJoint);
-  Sonar::initializeSonar(&sonar);
+  Sonar::initializeSonar(&sonar, &backSonar);
 
   display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display_handler.clearDisplay();
@@ -48,7 +49,7 @@ void setup() {
   display_handler.setCursor(0,0);
   display_handler.display();
 
-    Claw::clawSetup();
+  Claw::clawSetup();
 
   
   //pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
@@ -90,7 +91,32 @@ void loop() {
   delay(200);
 }
 
-void handle_R_interrupt()
+void handle_L_interrupt()
 {
-  encoders1.handle_R_interrupt();
+  encoders1.handle_L_interrupt();
+}
+
+
+void rampSection() {
+  int distFromBeacon = 1000;
+  const int countFor90 = 999;
+  const int idealDist = 20;
+
+  //while further than we want, keep moving
+  while (distFromBeacon>idealDist) {
+    distFromBeacon = Sonar::getDist(soundcm);
+  }
+
+  encoders1.rightPivotCount(countFor90);
+  encoders1.rightPivotCount(countFor90);
+  encoders1.rightPivotCount(countFor90);
+
+  Linkage::dropRamp();
+
+  encoders1.rightPivotCount(countFor90);
+  encoders1.rightPivotCount(countFor90);
+
+
+  //rotate left by 180 and drop ramp
+  //rotate left by 180 and move forward
 }

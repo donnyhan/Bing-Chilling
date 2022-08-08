@@ -48,6 +48,11 @@
 //Claw sonar sensor
 #define TRIG_PIN PB15
 #define ECHO_PIN PB15
+
+//Back sonar sensor
+#define BACK_TRIG_PIN PB14
+#define BACK_ECHO_PIN PB14
+
 //SONAR CONSTS
 #define MAX_DISTANCE 400
 #define ITERATIONS 5
