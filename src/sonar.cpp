@@ -7,9 +7,11 @@
 #include <NewPing.h>
 
 NewPing* Sonar::sonar_ptr;
+NewPing* Sonar::back_sonar_ptr;
 
-void Sonar::initializeSonar(NewPing* _sonar){
-    sonar_ptr = _sonar;
+void Sonar::initializeSonar(NewPing* _sonar, NewPing* _backsonar){
+    Sonar::sonar_ptr = _sonar;
+    Sonar::back_sonar_ptr = _backsonar;
 }
 
 //
@@ -73,6 +75,10 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
         }
         return distance;
  
+}
+
+void Sonar::findBeacon(float soundcm){
+    
 }
 
 #endif
