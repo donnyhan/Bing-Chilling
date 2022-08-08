@@ -74,7 +74,7 @@ const int RIGHTMOST = 90+BASEMAXDISP;
 //rack
 const float RETRACTEDPOS = 0;
 const float EXTENDEDPOS = 8.5;
-const float DEPOSITPOS = 7.5;
+const float DEPOSITPOS = 8.5;
 
 //HALL
 #define bombThreshold 100

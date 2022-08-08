@@ -10,6 +10,7 @@ public:
     static Servo* joint_servo_ptr;
     static Servo* base_servo_ptr;
     static float rackPosition;
+    static int treasureCount;
     static void clawSetup();
     static void initializeClaw(Servo* _claw_servo);
     static void initializeJoint(Servo* _joint_servo);

@@ -8,6 +8,7 @@ Servo* Claw::claw_servo_ptr;
 Servo* Claw::joint_servo_ptr;
 Servo* Claw::base_servo_ptr;
 float Claw::rackPosition;
+int Claw::treasureCount;
 
 void Claw::initializeClaw(Servo* _claw_servo){
     Claw::claw_servo_ptr = _claw_servo;
@@ -33,6 +34,7 @@ void Claw::clawSetup() {
   base_servo_ptr->attach(SERVOBASE);
   base_servo_ptr->write(90);
   rackPosition = 0;
+  treasureCount=0;
   delay(4000);
 
 }
@@ -145,7 +147,7 @@ void Claw::moveRack(float destinationcm)
 int Claw::isBomb(){
   int state = digitalRead(HALL);
   int bomb = 0;
-  if (state = 0) { //bomb
+  if (state == 0) { //bomb
     bomb = 1;
   }
   else { // treasure
@@ -199,7 +201,13 @@ void Claw::clawPickUp(int current_base_pos){ //sonar successfully detects treasu
     
     if (safe == 1) {
         //centre the base
-        rotateZero(current_base_pos);
+        //if (treasureCount % 2 == 0) {
+            current_base_pos = baseRotate(90, current_base_pos);
+        //}
+        //else {
+            //current_base_pos = baseRotate(90-30,current_base_pos);
+        //}
+        
 
         //rack to depositing position
         moveRack(DEPOSITPOS);
@@ -215,6 +223,10 @@ void Claw::clawPickUp(int current_base_pos){ //sonar successfully detects treasu
         
         //return to rack original position
         moveRack(RETRACTEDPOS);
+
+        rotateZero(current_base_pos);
+
+        treasureCount++;
     }
     else {
         openClaw();
