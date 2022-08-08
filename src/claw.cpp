@@ -145,7 +145,7 @@ void Claw::moveRack(float destinationcm)
 int Claw::isBomb(){
   int state = digitalRead(HALL);
   int bomb = 0;
-  if (state = 0) { //bomb
+  if (state == 0) { //bomb
     bomb = 1;
   }
   else { // treasure
