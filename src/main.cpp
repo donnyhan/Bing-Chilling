@@ -85,10 +85,13 @@ void setup() {
 // }
 
 void loop() {
-  // float distance = Sonar::detecting(soundcm, LEFTMOST);
+  float distance = Sonar::getDist(soundcm);
+  Serial2.println(distance);
   // Serial2.println(distance);
-  Serial2.println(analogRead(HALL));
-  delay(200);
+  // Serial2.println(analogRead(HALL));
+  // delay(200);
+
+
 }
 
 void handle_L_interrupt()
