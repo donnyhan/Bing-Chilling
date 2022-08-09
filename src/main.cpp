@@ -109,7 +109,7 @@ void handle_L_interrupt()
 //   const int idealDist = 20;
 
 //   //while further than we want, keep moving
-//   while (distFromBeacon>idealDist) {
+//   while (distFromBeacon>ideaDist) {
 //     distFromBeacon = Sonar::getDist(soundcm);
 //   }
 
