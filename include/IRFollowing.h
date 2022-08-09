@@ -2,14 +2,6 @@
 #define IRFOLLOWING_H
 
 #define LED_BUILTIN PB2
-#define IR_Sensor PA3 // analog in pin
-#define IR_Discharge PB5 // digital out pin
-#define IR_Left_Switch PB10 // digital out pin
-#define IR_Right_Switch PB11 // digital in pin
-#define MOTOR_R_F PB_0 // analog out pin
-#define MOTOR_R_B PB_1   // analog out pin
-#define MOTOR_L_F PB_8
-#define MOTOR_L_B PB_9
 #define MOTOR_FREQ 200
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels

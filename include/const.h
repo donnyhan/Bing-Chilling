@@ -28,8 +28,10 @@
 #define R_R_Sensor_2 PA3
 
 //IR
-#define IR1 PA4
-#define IR2 PA5
+#define IR_Sensor PA3
+#define IR_Discharge PB5
+#define IR_Left_Switch PB10
+#define IR_Right_Switch PB11
 
 //Wheels & H-bridge
 #define MOTOR_L_F PB_6
