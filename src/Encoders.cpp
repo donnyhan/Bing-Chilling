@@ -1,6 +1,8 @@
 #include "const.h"
 #include "Encoders.h"
 
+//196 cm = 146 pulse
+
 Encoders::Encoders()
 {
   countL = 0;
@@ -217,7 +219,7 @@ void Encoders::rightPivot()
 {
   turnR(23);
 }
-void Encoders::rightPivotCount(int counts)
+void Encoders::rightPivotCount(int counts) 
 {
   turnR(counts);
 }
