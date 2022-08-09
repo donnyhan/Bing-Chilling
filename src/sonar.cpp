@@ -32,22 +32,22 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
         int base_pos = Claw::baseRotate(targ_base_pos, Claw::base_servo_ptr->read());
         distance = getDist(soundcm);
 
-        if (distance < 17 && distance != 0){
+        if (distance < 18 && distance != 0){
             //Robot stops moving (wheel speed zero) 
             if (targL>=LEFTMOST) {
                 base_pos = Claw::baseRotate(targL, base_pos);
                 distanceL = getDist(soundcm);
             }
 
-            // if (targ_base_pos-10>=LEFTMOST) {
-            //     base_pos = Claw::baseRotate(targ_base_pos-10, base_pos);
-            //     distanceL2 = getDist(soundcm);
-            // }
+            if (targ_base_pos-10>=LEFTMOST) {
+                base_pos = Claw::baseRotate(targ_base_pos-10, base_pos);
+                distanceL2 = getDist(soundcm);
+            }
 
-            // if (targ_base_pos+10<=RIGHTMOST)  {
-            //     base_pos = Claw::baseRotate(targ_base_pos+10, base_pos);
-            //     distanceR2 = getDist(soundcm);
-            // }
+            if (targ_base_pos+10<=RIGHTMOST)  {
+                base_pos = Claw::baseRotate(targ_base_pos+10, base_pos);
+                distanceR2 = getDist(soundcm);
+            }
 
             if (targR<=RIGHTMOST) {
                 base_pos = Claw::baseRotate(targR, base_pos);
@@ -74,9 +74,7 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
             }
         }
         return distance;
- 
+
 }
-
-
 
 #endif
