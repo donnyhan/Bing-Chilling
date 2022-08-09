@@ -50,7 +50,8 @@ void setup() {
   display_handler.setCursor(0,0);
   display_handler.display();
 
-  Claw::clawSetup();
+  // Claw::clawSetup();
+  Linkage::linkageSetup();
 
   
   //pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
@@ -88,8 +89,12 @@ void setup() {
 void loop() {
   // float distance = Sonar::detecting(soundcm, LEFTMOST);
   // Serial2.println(distance);
-  Serial2.println(analogRead(HALL));
-  delay(200);
+  // Serial2.println(analogRead(HALL));
+  // delay(200);
+  Linkage::liftBox();
+  delay(2000);
+  Linkage::dropRamp();
+  delay(2000);
 }
 
 void handle_L_interrupt()
@@ -98,10 +103,10 @@ void handle_L_interrupt()
 }
 
 
-void rampSection() {
-  int distFromBeacon = 1000;
-  const int countFor90 = 999;
-  const int idealDist = 20;
+// void rampSection() {
+//   int distFromBeacon = 1000;
+//   const int countFor90 = 999;
+//   const int idealDist = 20;
 
 //   //while further than we want, keep moving
 //   while (distFromBeacon>idealDist) {
