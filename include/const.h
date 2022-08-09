@@ -24,8 +24,8 @@
 //Reflectance
 #define R_L_Sensor PA6
 #define R_R_Sensor PA7
-#define R_L_Sensor_2 PA2
-#define R_R_Sensor_2 PA3
+#define R_L_Sensor_2 PB0
+#define R_R_Sensor_2 PB1
 
 //IR
 #define IR_Sensor PA3

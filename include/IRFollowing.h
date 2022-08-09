@@ -3,14 +3,10 @@
 
 #define LED_BUILTIN PB2
 #define MOTOR_FREQ 200
-
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-#define OLED_RESET     -1 // This display does not have a reset pin accessible
-Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
 #define BASE_SPEED 500
 #define IR_Threshold 50
+
+Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 volatile uint32_t P_value = 9;
 volatile uint32_t D_value = 2;
