@@ -34,13 +34,14 @@ HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
 
 void setup() {
   pinSetup();
-  Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
-  attachInterrupt(digitalPinToInterrupt(enc_L), handle_L_interrupt, FALLING);
+  // Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
+  // attachInterrupt(digitalPinToInterrupt(enc_L), handle_L_interrupt, FALLING);
 
-  Claw::initializeClaw(&servoClaw);
-  Claw::initializeBase(&servoBase);
-  Claw::initializeJoint(&servoJoint);
-  Sonar::initializeSonar(&sonar, &backSonar);
+  // Claw::initializeClaw(&servoClaw);
+  // Claw::initializeBase(&servoBase);
+  // Claw::initializeJoint(&servoJoint);
+  // Sonar::initializeSonar(&sonar, &backSonar);
+  Linkage::initializeLink(&servoLinkL, &servoLinkR);
 
   display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   display_handler.clearDisplay();
@@ -49,74 +50,50 @@ void setup() {
   display_handler.setCursor(0,0);
   display_handler.display();
 
-  Claw::clawSetup();
-
+  // Claw::clawSetup();
+  Linkage::linkageSetup();
   
   //pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   //pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
 
   //Serial2.println("Serial2: 2");
 
+  delay(3000);
 
 }
-
-// void loop(){
-//   int countR = 0;
-//   int value = 0;
-//   display_handler.clearDisplay();
-//   display_handler.setCursor(0,0);
-
-//   countR = encoders1.countR;
-
-//   display_handler.println("countR:");
-//   display_handler.println(countR,DEC);
-
-//   display_handler.display();
-//   delay(200);
-  
-//   }
-
-// void loop() {
-//   Claw::baseRotate(150,90);
-//   Claw::baseRotate(30,150);
-//   Claw::ForwardStep(9);
-//   Claw::clawPickUp(30);
-
-// }
 
 void loop() {
-  // float distance = Sonar::detecting(soundcm, LEFTMOST);
-  // Serial2.println(distance);
-  Serial2.println(analogRead(HALL));
-  delay(200);
-}
-
-void handle_L_interrupt()
-{
-  encoders1.handle_L_interrupt();
-}
-
-
-void rampSection() {
-  int distFromBeacon = 1000;
-  const int countFor90 = 999;
-  const int idealDist = 20;
-
-  //while further than we want, keep moving
-  while (distFromBeacon>idealDist) {
-    distFromBeacon = Sonar::getDist(soundcm);
-  }
-
-  encoders1.rightPivotCount(countFor90);
-  encoders1.rightPivotCount(countFor90);
-  encoders1.rightPivotCount(countFor90);
-
+  Linkage::liftBox();
+  delay(1000);
   Linkage::dropRamp();
-
-  encoders1.rightPivotCount(countFor90);
-  encoders1.rightPivotCount(countFor90);
-
-
-  //rotate left by 180 and drop ramp
-  //rotate left by 180 and move forward
 }
+
+// void handle_L_interrupt()
+// {
+//   encoders1.handle_L_interrupt();
+// }
+
+
+// void rampSection() {
+//   int distFromBeacon = 1000;
+//   const int countFor90 = 999;
+//   const int idealDist = 20;
+
+//   //while further than we want, keep moving
+//   while (distFromBeacon>idealDist) {
+//     distFromBeacon = Sonar::getDist(soundcm);
+//   }
+
+//   encoders1.rightPivotCount(countFor90);
+//   encoders1.rightPivotCount(countFor90);
+//   encoders1.rightPivotCount(countFor90);
+
+//   Linkage::dropRamp();
+
+//   encoders1.rightPivotCount(countFor90);
+//   encoders1.rightPivotCount(countFor90);
+
+
+//   //rotate left by 180 and drop ramp
+//   //rotate left by 180 and move forward
+// }
