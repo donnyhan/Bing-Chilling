@@ -50,34 +50,58 @@ void setup() {
   display_handler.setCursor(0,0);
   display_handler.display();
 
-  // Claw::clawSetup();
-  Linkage::linkageSetup();
+  Claw::clawSetup();
+
   
   //pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   //pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
 
   //Serial2.println("Serial2: 2");
 
-  delay(3000);
 
 }
 
-void loop() {
-  Linkage::liftBox();
-  delay(1000);
-  Linkage::dropRamp();
-}
+// void loop(){
+//   int countR = 0;
+//   int value = 0;
+//   display_handler.clearDisplay();
+//   display_handler.setCursor(0,0);
 
-// void handle_L_interrupt()
-// {
-//   encoders1.handle_L_interrupt();
+//   countR = encoders1.countR;
+
+//   display_handler.println("countR:");
+//   display_handler.println(countR,DEC);
+
+//   display_handler.display();
+//   delay(200);
+  
+//   }
+
+// void loop() {
+//   Claw::baseRotate(150,90);
+//   Claw::baseRotate(30,150);
+//   Claw::ForwardStep(9);
+//   Claw::clawPickUp(30);
+
 // }
 
+void loop() {
+  // float distance = Sonar::detecting(soundcm, LEFTMOST);
+  // Serial2.println(distance);
+  Serial2.println(analogRead(HALL));
+  delay(200);
+}
 
-// void rampSection() {
-//   int distFromBeacon = 1000;
-//   const int countFor90 = 999;
-//   const int idealDist = 20;
+void handle_L_interrupt()
+{
+  encoders1.handle_L_interrupt();
+}
+
+
+void rampSection() {
+  int distFromBeacon = 1000;
+  const int countFor90 = 999;
+  const int idealDist = 20;
 
 //   //while further than we want, keep moving
 //   while (distFromBeacon>idealDist) {
