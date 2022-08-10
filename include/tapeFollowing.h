@@ -33,6 +33,7 @@ public:
     void handle_interrupt();
 
     void tapeSetup();
+    void tape_following();
 
     // VALUES
     volatile uint32_t P_value = 0;

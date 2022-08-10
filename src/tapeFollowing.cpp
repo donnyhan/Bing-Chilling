@@ -136,4 +136,8 @@ void Tape::handle_interrupt() {
   interrupt_counter++;
 }
 
+void Tape::tape_following() {
+  
+}
+
 #endif
