@@ -18,6 +18,7 @@ Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET)
 
 void handle_L_interrupt();
 void handle_interrupt();
+void Tape_following();
 
 //Encoders encoders1 = Encoders();
 
@@ -29,9 +30,11 @@ NewPing backSonar(BACK_TRIG_PIN,BACK_ECHO_PIN,MAX_DISTANCE);
 
 Servo servoLinkL;
 Servo servoLinkR;
+Tape Tape_follow (4,1);
 
 const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
 const float soundcm = soundc / 100;
+volatile bool stage1 = true;
 
 HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
 
@@ -98,14 +101,19 @@ void loop() {
   // Serial2.println(distance);
   // Serial2.println(analogRead(HALL));
   // delay(200);
-  Linkage::liftBox();
-  delay(2000);
-  Linkage::dropRamp();
-  delay(2000);
+  // Linkage::liftBox();
+  // delay(2000);
+  // Linkage::dropRamp();
+  // delay(2000);
+  while (stage1) {
+    Tape_following();
+    
+  }
 }
 
 void handle_interrupt() {
   //Tape.handle_interrupt();
+  
 }
 
 
@@ -133,3 +141,116 @@ void handle_interrupt() {
 //   //rotate left by 180 and drop ramp
 //   //rotate left by 180 and move forward
 // }
+void Tape_following() {
+  uint32_t P_value = Tape_follow.P_value;
+  uint32_t D_value = Tape_follow.D_value;
+  int reflectanceL = 0;
+  int reflectanceR = 0;
+  int reflectanceLL = 0;
+  int reflectanceRR = 0;
+  int Left_RFSensor = 0;
+  int Right_RFSensor = 0;
+  int error = 0;
+  int lasterr = 0;
+  int G = 0;
+  int RL_error = 0;
+  int RR_error = 0;
+    
+    reflectanceL = analogRead(R_L_Sensor);
+    reflectanceR = analogRead(R_R_Sensor);
+    reflectanceLL = analogRead(R_L_Sensor_2);
+    reflectanceRR = analogRead(R_R_Sensor_2);
+    while(reflectanceL > CW_Threshold && reflectanceR > CW_Threshold) {
+    Tape_follow.tp_motor_right(40);
+    reflectanceL = analogRead(R_L_Sensor);
+    reflectanceR = analogRead(R_R_Sensor);
+    error = 0;
+    delay(180);
+    Tape_follow.tp_motor_straight();
+    delay(500);
+    Tape_follow.tp_motor_stop();
+  }
+
+  while (reflectanceL <= OffTape_Threshold_X && reflectanceR <= OffTape_Threshold_X && reflectanceLL <= Side_Threshold_L && reflectanceRR <= Side_Threshold_R) {
+    Tape_follow.tp_motor_offtape();
+    delay(50);
+    Tape_follow.tp_motor_stop();
+    reflectanceL = analogRead(R_L_Sensor);
+    reflectanceR = analogRead(R_R_Sensor);
+    reflectanceLL = analogRead(R_L_Sensor_2);
+    reflectanceRR = analogRead(R_R_Sensor_2);
+    delay(20);
+  
+  }
+
+  RL_error = reflectanceL - PID_Threshold_L;
+  RR_error = reflectanceR - PID_Threshold_R;
+
+    
+  if (RL_error > 0 && RR_error > 0) {
+    //**archway//
+    error = 0;
+    G = 0;
+    Tape_follow.tp_motor_straight();
+    // display_handler.setCursor(70,20);
+    // display_handler.print("straight");
+  }
+  else if (RL_error < 0 && RR_error > 0) {
+    error = RL_error;
+    G=Tape_follow.PID(P_value,D_value,error);
+    Tape_follow.tp_motor_right(G);
+    
+    // display_handler.setCursor(70,20);
+    // display_handler.print("right");
+  }
+  else if (RR_error < 0 && RL_error > 0) {
+    error = abs(RR_error);
+    G=Tape_follow.PID(P_value,D_value,error);
+    Tape_follow.tp_motor_left(G);
+    
+    // display_handler.setCursor(70,20);
+    // display_handler.print("left");
+  }
+  else {
+    if (reflectanceRR > Side_Threshold_R) {
+      error = -160;
+      G=Tape_follow.PID(P_value,D_value,error);
+      Tape_follow.tp_motor_right(G);
+      // display_handler.setCursor(70,20);
+      // display_handler.print("right");
+    }
+    else if (reflectanceLL > Side_Threshold_L) {
+      error = 130;
+      G=Tape_follow.PID(P_value,D_value,error);
+      Tape_follow.tp_motor_left(G);
+      // display_handler.setCursor(70,20);
+      // display_handler.print("left");
+      if (reflectanceL > Archway_Threshold && reflectanceLL > Archway_Threshold) {
+        while (reflectanceRR < Archway_Threshold) {
+          Tape_follow.tp_motor_stop();
+          delay(100);
+          Tape_follow.left_turn(300);
+          delay(100);
+          Tape_follow.tp_motor_stop();
+          delay(50);
+          reflectanceRR = analogRead(R_R_Sensor_2);
+        }
+        Tape_follow.tp_motor_straight();
+        delay(300);
+        stage1 = false;
+      }
+    }
+  }
+  
+  // display_handler.setCursor(70,0);
+  // display_handler.print("G ");
+  // display_handler.println(G);
+  // display_handler.setCursor(70,40);
+  // display_handler.print("error");
+  // display_handler.println(error);
+
+  // display_handler.display();
+  delay(50);
+
+ 
+}
