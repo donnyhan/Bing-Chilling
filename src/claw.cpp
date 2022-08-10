@@ -1,7 +1,7 @@
 #ifndef CLAW_C
 #define CLAW_C
 
-#include "const.h"
+#include <const.h>
 #include <claw.h>
 
 Servo* Claw::claw_servo_ptr;
