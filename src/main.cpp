@@ -43,12 +43,12 @@ void setup() {
   // Sonar::initializeSonar(&sonar, &backSonar);
   Linkage::initializeLink(&servoLinkL, &servoLinkR);
 
-  display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  display_handler.clearDisplay();
-  display_handler.setTextSize(1);
-  display_handler.setTextColor(SSD1306_WHITE);
-  display_handler.setCursor(0,0);
-  display_handler.display();
+  // display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  // display_handler.clearDisplay();
+  // display_handler.setTextSize(1);
+  // display_handler.setTextColor(SSD1306_WHITE);
+  // display_handler.setCursor(0,0);
+  // display_handler.display();
 
   // Claw::clawSetup();
   Linkage::linkageSetup();
@@ -97,10 +97,6 @@ void loop() {
   delay(2000);
 }
 
-void handle_L_interrupt()
-{
-  encoders1.handle_L_interrupt();
-}
 
 
 // void rampSection() {

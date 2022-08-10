@@ -5,50 +5,62 @@
 #include <tapeFollowing.h>
 
 //get gain
-int Tape::PID(int P_gain, int D_gain, int R) {
-    
-  int P=P_gain*abs(R);
-  int D=D_gain*(abs(R)-lasterr);
+///
+int Tape:: PID (int P_gain, int D_gain, int R) {
+  int P;
+  int D;
+  int G;
+  
+  P=P_gain*abs(R);
+  D=D_gain*(abs(R)-abs(lasterr));
 
-  int G=P+D;
+  G=P+D;
   lasterr=R;
-  return G;
+  return G/13;
 }
 
 void Tape::tp_motor_straight() {
   pwm_start(MOTOR_R_F, MOTOR_FREQ, BASE_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_R_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
  
-  pwm_start(MOTOR_L_F, MOTOR_FREQ, BASE_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_F, MOTOR_FREQ, BASE_SPEED + 30, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_L_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
 }
 
 void Tape::tp_motor_left(int gain) {
-  pwm_start(MOTOR_R_F, MOTOR_FREQ, BASE_SPEED+gain, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_R_F, MOTOR_FREQ, BASE_SPEED + gain, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_R_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
  
-  pwm_start(MOTOR_L_F, MOTOR_FREQ, 90, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_F, MOTOR_FREQ, 140, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_L_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
 }
 
 void Tape::tp_motor_right(int gain) {
-  pwm_start(MOTOR_R_F, MOTOR_FREQ, 90, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_R_F, MOTOR_FREQ, 120, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_R_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
  
-  pwm_start(MOTOR_L_F, MOTOR_FREQ, BASE_SPEED+gain, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_F, MOTOR_FREQ, BASE_SPEED + gain+20, RESOLUTION_10B_COMPARE_FORMAT);
   pwm_start(MOTOR_L_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
 }
 
+void Tape::left_turn(int gain) {
+  pwm_start(MOTOR_R_F, MOTOR_FREQ, gain, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_R_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+ 
+  pwm_start(MOTOR_L_F, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_B, MOTOR_FREQ, 300, RESOLUTION_10B_COMPARE_FORMAT);
+}
+
 void Tape::tp_motor_offtape() {
-  int Gain;
-  Gain=110;
+  int G;
+  G=200;
   //display_handler.setCursor(70,20);
   if (error > 0) {
-    tp_motor_left(Gain);
+    tp_motor_left(G);
    //display_handler.println("left");
   }
   else if (error < 0) {
-    tp_motor_right(Gain);
+    tp_motor_right(G+30);
     //display_handler.println("right");
   }
   else {
@@ -68,28 +80,52 @@ pwm_start(MOTOR_L_F, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
 pwm_start(MOTOR_L_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
 }
 
-void Tape::edges(){
-  int leftEdge, rightEdge;
+void Tape::turnR(int leftStop)
+{
+  delay(100);
 
-  leftEdge = digitalRead(edgeL);
-  rightEdge = digitalRead(edgeR);
+  interrupt_counter = 0;
 
-  if(leftEdge == 0 && rightEdge ==1 ){
-    //motor moves back a bit and to the right
+  pwm_start(MOTOR_R_F, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_R_B, MOTOR_FREQ, 300, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_F, MOTOR_FREQ, 300, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+
+  bool leftDone = false;
+
+  while (!leftDone)
+  {
+    if (interrupt_counter > leftStop && !leftDone)
+    {
+      pwm_start(MOTOR_L_F, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+      pwm_start(MOTOR_L_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+      leftDone = true;
+    }
   }
+}
+void Tape::bridge_Left() {
+  pwm_start(MOTOR_R_F, MOTOR_FREQ, 300, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_R_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_F, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_B, MOTOR_FREQ, 300, RESOLUTION_10B_COMPARE_FORMAT);
 
-  if (rightEdge ==0 && leftEdge ==1){
-    //motor moves back a bit and to the left
-  }
+}
 
-  if(rightEdge ==1 && leftEdge ==1){
-    //robot moves straight 
-  }
+void Tape::bridge_Right() {
+  pwm_start(MOTOR_R_F, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_R_B, MOTOR_FREQ, 300, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_F, MOTOR_FREQ, 300, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_B, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+}
+void Tape::bridge_Back() {
+  pwm_start(MOTOR_R_F, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_R_B, MOTOR_FREQ, 300, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_F, MOTOR_FREQ, 0, RESOLUTION_10B_COMPARE_FORMAT);
+  pwm_start(MOTOR_L_B, MOTOR_FREQ, 300, RESOLUTION_10B_COMPARE_FORMAT);
+}
 
-  if(rightEdge == 0 && leftEdge ==0){
-    //moves back
-  }
-
+void Tape::handle_interrupt() {
+  interrupt_counter++;
 }
 
 #endif

@@ -12,6 +12,10 @@
 
 // all pins defined here
 
+//temporary pot pins
+#define P_in PA12 // analog out pin
+#define D_in PA15   // analog out pin
+
 //claw
 #define stp PB12
 #define dir PB13
@@ -19,13 +23,16 @@
 #define SERVOJOINT PA10
 #define SERVOBASE PA0
 
-#define HALL PA7 //change for final
+#define HALL PA11
 
 //Reflectance
-#define R_L_Sensor PA6
-#define R_R_Sensor PA7
+#define R_L_Sensor PA7
+#define R_R_Sensor PA6
 #define R_L_Sensor_2 PB0
-#define R_R_Sensor_2 PB1
+#define R_R_Sensor_2 PA5
+//reflectance edges
+#define Left_Sensor PB1
+#define Right_Sensor PA4
 
 //IR
 #define IR_Sensor PA3
@@ -41,11 +48,8 @@
 
 //Rotary Enc
 #define enc_L PB3
-#define enc_R PB4
+//#define enc_R PB4
 
-//Reflectance on the edges
-#define edgeL PA12
-#define edgeR PA15
 
 //Claw sonar sensor
 #define TRIG_PIN PB15
@@ -87,14 +91,12 @@ const float DEPOSITPOS = 8.5;
 #define bombThreshold 100
 
 //TAPE FOLLOWING
-#define BASE_SPEED 300
-#define RR_Threshold 38
-#define RL_Threshold 84
-#define CW_Threshold 500
-#define RL2_Threshold 100
-#define RR2_Threshold 100
-
-
+// #define BASE_SPEED 300
+// #define RR_Threshold 38
+// #define RL_Threshold 84
+// #define CW_Threshold 500
+// #define RL2_Threshold 100
+// #define RR2_Threshold 100
 
 #define MOTOR_FREQ 500
 
