@@ -276,7 +276,7 @@ void Tape_following() {
 void IR_following() {
 i = 0;
 
-  while(i < 2) { //reads left and right IR sensor almost simulataneously
+  while(i < 2) { //reads left and right IR sensor almost simultaneously
       
     if(i % 2 == 0) {
     read_IR(LEFT_IR);
