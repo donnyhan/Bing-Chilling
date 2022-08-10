@@ -126,7 +126,7 @@ void Encoders::turnR(int leftStop)
 //       pwm_start(MOTOR_L_F, MOTOR_FREQ, 0, RESOLUTION_12B_COMPARE_FORMAT);
 //       pwm_start(MOTOR_L_B, MOTOR_FREQ, 0, RESOLUTION_12B_COMPARE_FORMAT);
 //       leftDone = true;
-//     }
+//     }  
 //   }
 // }
 
