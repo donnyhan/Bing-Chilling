@@ -8,6 +8,8 @@
 #include <claw.h>
 #include <sonar.h>
 #include <linkage.h>
+#include <tapeFollowing.h>
+#include <IRFollowing.h>
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -15,8 +17,9 @@
 Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void handle_L_interrupt();
+void handle_interrupt();
 
-Encoders encoders1 = Encoders();
+//Encoders encoders1 = Encoders();
 
 Servo servoClaw;
 Servo servoJoint;
@@ -53,11 +56,15 @@ void setup() {
   // Claw::clawSetup();
   Linkage::linkageSetup();
 
+
+  attachInterrupt(digitalPinToInterrupt(enc_L), handle_interrupt, RISING);
+
   
   //pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   //pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
 
   //Serial2.println("Serial2: 2");
+
 
 
 }
@@ -95,6 +102,10 @@ void loop() {
   delay(2000);
   Linkage::dropRamp();
   delay(2000);
+}
+
+void handle_interrupt() {
+  //Tape.handle_interrupt();
 }
 
 

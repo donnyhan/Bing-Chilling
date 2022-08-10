@@ -4,6 +4,14 @@
 #include <const.h>
 #include <tapeFollowing.h>
 
+//setup
+
+Tape::Tape(int p_val, int d_val){
+  P_value = p_val;
+
+  D_value = d_val;
+}
+
 //get gain
 ///
 int Tape:: PID (int P_gain, int D_gain, int R) {

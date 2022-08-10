@@ -16,6 +16,8 @@
 class Tape
 {
 public:
+    Tape(int p_val, int d_val);
+
     int PID (int P_gain, int D_gain, int R);
     static void tp_motor_left(int gain);
     static void tp_motor_right(int gain);
@@ -23,14 +25,16 @@ public:
     void tp_motor_offtape();
     static void tp_motor_stop();
 
-    void handle_interrupt();
     void left_turn(int gain);
     void turnR(int leftStop);
     static void bridge_Left();
     static void bridge_Right();
     static void bridge_Back();
+    void handle_interrupt();
 
+    void tapeSetup();
 
+    // VALUES
     volatile uint32_t P_value = 0;
     volatile uint32_t D_value = 0;
     volatile int reflectanceL = 0;
