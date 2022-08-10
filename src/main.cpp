@@ -19,6 +19,7 @@ Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET)
 void handle_L_interrupt();
 void handle_interrupt();
 void Tape_following();
+void IR_following();
 
 //Encoders encoders1 = Encoders();
 
@@ -32,9 +33,11 @@ Servo servoLinkL;
 Servo servoLinkR;
 Tape Tape_follow (4,1);
 
+enum IR_SENSOR {LEFT_IR, RIGHT_IR};
+
 const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
 const float soundcm = soundc / 100;
-volatile bool stage = 1;
+volatile int stage = 1;
 
 HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
 
@@ -105,10 +108,21 @@ void loop() {
   // delay(2000);
   // Linkage::dropRamp();
   // delay(2000);
+
   while (stage == 1) {
     Tape_following();
-    
+    Sonar::detecting(soundcm, LEFTMOST);
   }
+
+  while(stage == 2) {
+    IR_following();
+    Sonar::detecting(soundcm, LEFTMOST);
+  }
+
+  while(stage == 3) {
+    //rampSection();
+  }
+
 }
 
 void handle_interrupt() {
@@ -257,4 +271,52 @@ void Tape_following() {
   delay(50);
 
  
+}
+
+void IR_following() {
+i = 0;
+
+  while(i < 2) { //reads left and right IR sensor almost simulataneously
+      
+    if(i % 2 == 0) {
+    read_IR(LEFT_IR);
+    Left_IR = analogRead(IR_Sensor);
+
+    } else {
+    read_IR(RIGHT_IR);
+    Right_IR = analogRead(IR_Sensor);
+
+    }
+
+    i++;
+
+  }
+
+  if(Left_IR != 0 && Right_IR != 0) { //checks to see if both are 0. (proceeds to next stage if so)
+  IR_error = Left_IR - Right_IR;
+
+    if(IR_error >= -IR_Threshold && IR_error <= IR_Threshold) { //if both sensors 
+      IR_error = 0;
+      G = 0;
+      Tape::tp_motor_straight();
+
+    } else if(IR_error > IR_Threshold) {
+      G=PID(IR_P_value,IR_D_value,IR_error);
+      Tape::tp_motor_left(G);
+  
+    } else if (IR_error < -IR_Threshold) {
+      IR_error = abs(IR_error);
+      G=PID(IR_P_value,IR_D_value,IR_error);
+      Tape::tp_motor_right(G);
+
+    }
+
+  } else {
+
+      if(stage == 2){
+      stage++;
+    }
+
+  }
+
 }
