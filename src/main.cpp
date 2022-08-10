@@ -34,7 +34,7 @@ Tape Tape_follow (4,1);
 
 const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
 const float soundcm = soundc / 100;
-volatile bool stage1 = true;
+volatile bool stage = 1;
 
 HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
 
@@ -105,7 +105,7 @@ void loop() {
   // delay(2000);
   // Linkage::dropRamp();
   // delay(2000);
-  while (stage1) {
+  while (stage == 1) {
     Tape_following();
     
   }
@@ -141,6 +141,8 @@ void handle_interrupt() {
 //   //rotate left by 180 and drop ramp
 //   //rotate left by 180 and move forward
 // }
+
+
 void Tape_following() {
   uint32_t P_value = Tape_follow.P_value;
   uint32_t D_value = Tape_follow.D_value;
@@ -237,7 +239,9 @@ void Tape_following() {
         }
         Tape_follow.tp_motor_straight();
         delay(300);
-        stage1 = false;
+        if (stage == 1) {
+          stage++;
+        }
       }
     }
   }
