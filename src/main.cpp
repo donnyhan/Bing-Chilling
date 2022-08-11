@@ -31,6 +31,20 @@ Servo servoLinkL;
 Servo servoLinkR;
 Tape Tape_follow (4,1);
 
+volatile uint32_t P_value = Tape_follow.P_value;
+volatile uint32_t D_value = Tape_follow.D_value;
+volatile int reflectanceL = 0;
+volatile int reflectanceR = 0;
+volatile int reflectanceLL = 0;
+volatile int reflectanceRR = 0;
+volatile int Left_RFSensor = 0;
+volatile int Right_RFSensor = 0;
+volatile int error = 0;
+volatile int lasterr = 0;
+volatile int G = 0;
+volatile int RL_error = 0;
+volatile int RR_error = 0;
+
 const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
 const float soundcm = soundc / 100;
 volatile int stage = 1;
@@ -40,13 +54,13 @@ void setup() {
   Serial.begin(9600);
   // attachInterrupt(digitalPinToInterrupt(enc_L), handle_L_interrupt, FALLING);
 
-  // Claw::initializeClaw(&servoClaw);
-  // Claw::initializeBase(&servoBase);
-  // Claw::initializeJoint(&servoJoint);
-  // Sonar::initializeSonar(&sonar, &backSonar);
+  Claw::initializeClaw(&servoClaw);
+  Claw::initializeBase(&servoBase);
+  Claw::initializeJoint(&servoJoint);
+  Sonar::initializeSonar(&sonar, &backSonar);
   Linkage::initializeLink(&servoLinkL, &servoLinkR);
 
-  // Claw::clawSetup();
+  Claw::clawSetup();
   Linkage::linkageSetup();
 
 
@@ -92,20 +106,22 @@ void loop() {
   // delay(2000);
   // Linkage::dropRamp();
   // delay(2000);
+  //Serial.println(Sonar::getDist(soundcm));
+  Sonar::detecting(soundcm,90);
 
-  while (stage == 1) {
-    Tape_following();
-    Sonar::detecting(soundcm, LEFTMOST);
-  }
+  // while (stage == 1) {
+  //   Tape_following();
+  //   // Sonar::detecting(soundcm, LEFTMOST);
+  // }
 
-  while(stage == 2) {
-    IR_following();
-    Sonar::detecting(soundcm, LEFTMOST);
-  }
+  // while(stage == 2) {
+  //   IR_following();
+  //   Sonar::detecting(soundcm, LEFTMOST);
+  // }
 
-  while(stage == 3) {
+  // while(stage == 3) {
     //rampSection();
-  }
+  // }
 
 }
 
@@ -143,24 +159,16 @@ void rampSection() {
 
 
 void Tape_following() {
-  uint32_t P_value = Tape_follow.P_value;
-  uint32_t D_value = Tape_follow.D_value;
-  int reflectanceL = 0;
-  int reflectanceR = 0;
-  int reflectanceLL = 0;
-  int reflectanceRR = 0;
-  int Left_RFSensor = 0;
-  int Right_RFSensor = 0;
-  int error = 0;
-  int lasterr = 0;
-  int G = 0;
-  int RL_error = 0;
-  int RR_error = 0;
     
     reflectanceL = analogRead(R_L_Sensor);
     reflectanceR = analogRead(R_R_Sensor);
     reflectanceLL = analogRead(R_L_Sensor_2);
     reflectanceRR = analogRead(R_R_Sensor_2);
+    Serial.print("reflectance L: "); Serial.print(reflectanceL);
+    Serial.print("  reflectance R: "); Serial.print(reflectanceR);
+    Serial.print("  reflectance LL: "); Serial.print(reflectanceLL);
+    Serial.print("  reflectance RR: "); Serial.print(reflectanceRR);
+    Serial.println(" ");
     while(reflectanceL > CW_Threshold && reflectanceR > CW_Threshold) {
     Tape_follow.tp_motor_right(40);
     reflectanceL = analogRead(R_L_Sensor);

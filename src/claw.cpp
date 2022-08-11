@@ -111,7 +111,7 @@ void Claw::ForwardStep(float distancecm)
   for(int y=0; y<stepNum; y++)
   {
     digitalWrite(stp,HIGH); //Trigger one step
-    delay(1);
+    delay(15);
     digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
   }
   rackPosition += distancecm;
@@ -124,7 +124,7 @@ void Claw::BackwardStep(float distancecm)
   for(int y=0; y<stepNum; y++)
   {
     digitalWrite(stp,HIGH); //Trigger one step
-    delay(1);
+    delay(15);
     digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
   }
   rackPosition -= distancecm;
