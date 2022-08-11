@@ -65,15 +65,14 @@ void IR::IR_Run() {
   int G;
   int i=0;
   int IRL_error;
-  // display_handler.clearDisplay();
-  // display_handler.setCursor(0,0);
+
   // digitalWrite(LED_BUILTIN, HIGH);
 
-  // display_handler.println("G:");
-  // display_handler.println(G);
+  // Serial.print("G:");
+  // Serial.print(G);
 
-  //display_handler.println("D:");
-  //display_handler.println(D_value);
+  //Serial.print("  D:");
+  //Serial.println(D_value);
 
   i++;
 
@@ -85,13 +84,11 @@ void IR::IR_Run() {
 
   }
 
-    // display_handler.println(Left_IR);
-    // display_handler.setCursor(0,25);
-    // display_handler.println(Right_IR);
+    // Serial.println(Left_IR);
+    // Serial.println(Right_IR);
 
-  // display_handler.println(i);
+  // Serial.println(i);
 
-  // display_handler.display();
 
   IRL_error = Left_IR - Right_IR;
 
@@ -99,24 +96,24 @@ void IR::IR_Run() {
     IR_error = 0;
     G = 0;
     Tape::tp_motor_straight();
-    // display_handler.setCursor(70,20);
-    // display_handler.println("straight");
+    // Serial.setCursor(70,20);
+    // Serial.println("straight");
 
   } else if(IRL_error > IR_Threshold) {
     IR_error = IRL_error;
     G=PID(IR_P_value,IR_D_value,IR_error);
     Tape::tp_motor_left(G);
 
-    // display_handler.setCursor(70,20);
-    // display_handler.println("go left");
+    // Serial.setCursor(70,20);
+    // Serial.println("go left");
 
   } else if (IRL_error < 0) {
     IR_error = abs(IRL_error);
     G=PID(IR_P_value,IR_D_value,IR_error);
     Tape::tp_motor_right(G);
 
-    // display_handler.setCursor(70,20);
-    // display_handler.println("go right");
+    // Serial.setCursor(70,20);
+    // Serial.println("go right");
 
   }
 

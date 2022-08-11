@@ -3,7 +3,6 @@
 
 #define IR_Threshold 50
 
-// Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 
 class IR

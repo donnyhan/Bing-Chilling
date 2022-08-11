@@ -62,22 +62,20 @@ void Tape::left_turn(int gain) {
 void Tape::tp_motor_offtape() {
   int G;
   G=200;
-  //display_handler.setCursor(70,20);
   if (error > 0) {
     tp_motor_left(G);
-   //display_handler.println("left");
+   //Serial.println("left");
   }
   else if (error < 0) {
     tp_motor_right(G+30);
-    //display_handler.println("right");
+    //Serial.println("right");
   }
   else {
     tp_motor_straight();
-    //display_handler.println("straight");
+    //Serial.println("straight");
   }
 
-  //display_handler.println(G);
-  //display_handler.display();
+  //Serial.println(G);
   
 }
 void Tape::tp_motor_stop() {

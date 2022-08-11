@@ -11,11 +11,6 @@
 #include <tapeFollowing.h>
 #include <IRFollowing.h>
 
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-#define OLED_RESET     -1 // This display does not have a reset pin accessible
-Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
 enum IR_SENSOR {LEFT_IR, RIGHT_IR};
 
 void handle_L_interrupt();
@@ -40,11 +35,9 @@ const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
 const float soundcm = soundc / 100;
 volatile int stage = 1;
 
-HardwareSerial Serial2(USART2);   // PA3  (RX)  PA2  (TX)
-
 void setup() {
   pinSetup();
-  // Serial2.begin(9600);  // PA3  (RX)  PA2  (TX)
+  Serial.begin(9600);
   // attachInterrupt(digitalPinToInterrupt(enc_L), handle_L_interrupt, FALLING);
 
   // Claw::initializeClaw(&servoClaw);
@@ -52,13 +45,6 @@ void setup() {
   // Claw::initializeJoint(&servoJoint);
   // Sonar::initializeSonar(&sonar, &backSonar);
   Linkage::initializeLink(&servoLinkL, &servoLinkR);
-
-  // display_handler.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  // display_handler.clearDisplay();
-  // display_handler.setTextSize(1);
-  // display_handler.setTextColor(SSD1306_WHITE);
-  // display_handler.setCursor(0,0);
-  // display_handler.display();
 
   // Claw::clawSetup();
   Linkage::linkageSetup();
@@ -70,7 +56,7 @@ void setup() {
   //pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   //pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
 
-  //Serial2.println("Serial2: 2");
+  Serial.println("Serial start");
 
 
 
@@ -79,15 +65,12 @@ void setup() {
 // void loop(){
 //   int countR = 0;
 //   int value = 0;
-//   display_handler.clearDisplay();
-//   display_handler.setCursor(0,0);
 
 //   countR = encoders1.countR;
 
-//   display_handler.println("countR:");
-//   display_handler.println(countR,DEC);
+//   Serial.print("countR:");
+//   Serial.println(countR,DEC);
 
-//   display_handler.display();
 //   delay(200);
   
 //   }
@@ -197,6 +180,11 @@ void Tape_following() {
     reflectanceR = analogRead(R_R_Sensor);
     reflectanceLL = analogRead(R_L_Sensor_2);
     reflectanceRR = analogRead(R_R_Sensor_2);
+    Serial.print("reflectance L: "); Serial.print(reflectanceL);
+    Serial.print("  reflectance R: "); Serial.print(reflectanceR);
+    Serial.print("  reflectance LL: "); Serial.print(reflectanceLL);
+    Serial.print("  reflectance RR: "); Serial.print(reflectanceRR);
+    Serial.println(" ");
     delay(20);
   
   }
@@ -210,39 +198,34 @@ void Tape_following() {
     error = 0;
     G = 0;
     Tape_follow.tp_motor_straight();
-    // display_handler.setCursor(70,20);
-    // display_handler.print("straight");
+    // Serial.print("straight");
   }
   else if (RL_error < 0 && RR_error > 0) {
     error = RL_error;
     G=Tape_follow.PID(P_value,D_value,error);
     Tape_follow.tp_motor_right(G);
     
-    // display_handler.setCursor(70,20);
-    // display_handler.print("right");
+    // Serial.print("right");
   }
   else if (RR_error < 0 && RL_error > 0) {
     error = abs(RR_error);
     G=Tape_follow.PID(P_value,D_value,error);
     Tape_follow.tp_motor_left(G);
     
-    // display_handler.setCursor(70,20);
-    // display_handler.print("left");
+    // Serial.print("left");
   }
   else {
     if (reflectanceRR > Side_Threshold_R) {
       error = -160;
       G=Tape_follow.PID(P_value,D_value,error);
       Tape_follow.tp_motor_right(G);
-      // display_handler.setCursor(70,20);
-      // display_handler.print("right");
+      // Serial.print("right");
     }
     else if (reflectanceLL > Side_Threshold_L) {
       error = 130;
       G=Tape_follow.PID(P_value,D_value,error);
       Tape_follow.tp_motor_left(G);
-      // display_handler.setCursor(70,20);
-      // display_handler.print("left");
+      // Serial.print("left");
       if (reflectanceL > Archway_Threshold && reflectanceLL > Archway_Threshold) {
         while (reflectanceRR < Archway_Threshold) {
           Tape_follow.tp_motor_stop();
@@ -262,14 +245,11 @@ void Tape_following() {
     }
   }
   
-  // display_handler.setCursor(70,0);
-  // display_handler.print("G ");
-  // display_handler.println(G);
-  // display_handler.setCursor(70,40);
-  // display_handler.print("error");
-  // display_handler.println(error);
+  Serial.print("G ");
+  Serial.println(G);
+  Serial.print("error");
+  Serial.println(error);
 
-  // display_handler.display();
   delay(50);
 
  

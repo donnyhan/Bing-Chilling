@@ -161,10 +161,8 @@ int Claw::closeClaw() {
         if (isBomb() == 1) {
             safe =0;
         }
-        Serial2.println(safe);
-        Serial2.println(!safe);
+
         if (safe ==0) {
-            Serial2.println("should break");
             break;
         }
         claw_servo_ptr->write(claw_pos);
