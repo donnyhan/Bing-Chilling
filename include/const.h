@@ -64,7 +64,7 @@
 #define ITERATIONS 5
 #define HUM 40
 #define TEMP 20
-#define ANGLE 30
+#define ANGLE 35
 
 
 //4 bar linkage
@@ -84,8 +84,8 @@ const int RIGHTMOST = 90+BASEMAXDISP;
 
 //rack
 const float RETRACTEDPOS = 0;
-const float EXTENDEDPOS = 8.5;
-const float DEPOSITPOS = 8.5;
+const float EXTENDEDPOS = 7.5;
+const float DEPOSITPOS = 8                                      ;
 
 //HALL
 #define bombThreshold 100

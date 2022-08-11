@@ -3,7 +3,7 @@
 
 
 //constants
-#define BASE_SPEED 500
+#define BASE_SPEED 400
 #define PID_Threshold_L 200
 #define PID_Threshold_R 150
 #define Side_Threshold_R 210

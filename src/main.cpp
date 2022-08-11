@@ -107,12 +107,12 @@ void loop() {
   // Linkage::dropRamp();
   // delay(2000);
   //Serial.println(Sonar::getDist(soundcm));
-  Sonar::detecting(soundcm,90);
+  //Sonar::detecting(soundcm,90);
 
-  // while (stage == 1) {
-  //   Tape_following();
-  //   // Sonar::detecting(soundcm, LEFTMOST);
-  // }
+  while (stage == 1) {
+    Tape_following();
+    Sonar::detecting(soundcm, LEFTMOST);
+  }
 
   // while(stage == 2) {
   //   IR_following();
