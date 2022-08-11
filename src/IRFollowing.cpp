@@ -5,6 +5,31 @@
 #include <IRFollowing.h>
 #include <tapeFollowing.h>
 
+void IR::read_IR(IR_SENSOR sensor)
+  {
+    int low_switch, high_switch;
+    switch (sensor)
+    {
+    case LEFT_IR:
+      low_switch = IR_Right_Switch;
+      high_switch = IR_Left_Switch;
+      break;
+    case RIGHT_IR:
+      low_switch = IR_Left_Switch;
+      high_switch = IR_Right_Switch;
+      break;
+    }
+
+    digitalWrite(low_switch, LOW);
+    delay(50);
+    digitalWrite(high_switch, HIGH);
+
+    digitalWrite(IR_Discharge, HIGH);
+    delay(3);
+    digitalWrite(IR_Discharge, LOW);
+    delay(3);
+
+  }
 
 void IR::read_Left_IR() {
     digitalWrite(IR_Right_Switch, LOW);

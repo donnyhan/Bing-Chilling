@@ -24,7 +24,7 @@ void Tape_following();
 void IR_following();
 void read_IR(IR_SENSOR);
 
-//Encoders encoders1 = Encoders();
+Encoders encoders1 = Encoders();
 
 Servo servoClaw;
 Servo servoJoint;
@@ -133,29 +133,30 @@ void handle_interrupt() {
 
 
 
-// void rampSection() {
-//   int distFromBeacon = 1000;
-//   const int countFor90 = 999;
-//   const int idealDist = 20;
+void rampSection() {
+  //change numbers
+  int distFromBeacon = 1000;
+  const int countFor90 = 999;
+  const int idealDist = 20;
 
-//   //while further than we want, keep moving
-//   while (distFromBeacon>idealDist) {
-//     distFromBeacon = Sonar::getDist(soundcm);
-//   }
+  //while further than we want, keep moving
+  while (distFromBeacon>idealDist) {
+    distFromBeacon = Sonar::getDist(soundcm);
+  }
 
-//   encoders1.rightPivotCount(countFor90);
-//   encoders1.rightPivotCount(countFor90);
-//   encoders1.rightPivotCount(countFor90);
+  encoders1.rightPivotCount(countFor90);
+  encoders1.rightPivotCount(countFor90);
+  encoders1.rightPivotCount(countFor90);
 
-//   Linkage::dropRamp();
+  Linkage::dropRamp();
 
-//   encoders1.rightPivotCount(countFor90);
-//   encoders1.rightPivotCount(countFor90);
+  encoders1.rightPivotCount(countFor90);
+  encoders1.rightPivotCount(countFor90);
 
 
-//   //rotate left by 180 and drop ramp
-//   //rotate left by 180 and move forward
-// }
+  //rotate left by 180 and drop ramp
+  //rotate left by 180 and move forward
+}
 
 
 void Tape_following() {
@@ -299,7 +300,7 @@ int IR_D_value = 2;
 
   }
 
-  if(Left_IR != 0 && Right_IR != 0) { //checks to see if both are 0. (proceeds to next stage if so)
+  if(Sonar::getDist(soundcm) < 30) { //checks to see if the robot is close to the end
   IR_error = Left_IR - Right_IR;
 
     if(IR_error >= -IR_Threshold && IR_error <= IR_Threshold) { //if both sensors are similar to each other
