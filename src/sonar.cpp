@@ -34,7 +34,7 @@ int Sonar::detecting(float soundcm, int targ_base_pos, int base_pos, int distanc
         //int base_pos = Claw::baseRotate(targ_base_pos, Claw::base_servo_ptr->read());
         //distance = getDist(soundcm);
 
-        if (distance < 18 && distance != 0){
+        if (distance < 20 && distance != 0){
             //Robot stops moving (wheel speed zero) 
             //Tape::tp_motor_stop();
 

@@ -29,7 +29,7 @@ NewPing backSonar(BACK_TRIG_PIN,BACK_ECHO_PIN,MAX_DISTANCE);
 
 Servo servoLinkL;
 Servo servoLinkR;
-Tape Tape_follow (8,1);
+Tape Tape_follow (10,1);
 
 volatile uint32_t P_value = Tape_follow.P_value;
 volatile uint32_t D_value = Tape_follow.D_value;
@@ -117,7 +117,7 @@ void loop() {
     Tape_following();
 
     if(treasure == 0){
-      curr_base_pos = Claw::baseRotate(LEFTMOST, Claw::base_servo_ptr->read());
+      curr_base_pos = Claw::baseRotate(LEFTMOST+2, Claw::base_servo_ptr->read());
       float dist = Sonar::getDist(soundcm);
       if (dist <=20 && dist != 0){
         Tape::tp_motor_stop();
@@ -127,11 +127,11 @@ void loop() {
         servoJoint.write(180);
         treasure = Sonar::detecting(soundcm, LEFTMOST, curr_base_pos, dist);
         Tape_follow.bridge_Back();
-        delay(300);
+        delay(1000);
       }
     }
     else if(treasure == 1){
-      curr_base_pos = Claw::baseRotate(LEFTMOST, Claw::base_servo_ptr->read());
+      curr_base_pos = Claw::baseRotate(LEFTMOST+2, Claw::base_servo_ptr->read());
       float dist = Sonar::getDist(soundcm);
       if (dist <=20 && dist != 0){
         Tape::tp_motor_stop();
@@ -216,7 +216,7 @@ void Tape_following() {
     reflectanceR = analogRead(R_R_Sensor);
     error = 0;
     delay(180);
-    Tape_follow.CW(1000);
+    Tape_follow.CW(1100);
     delay(400);
     Tape_follow.tp_motor_stop();
   }
@@ -245,11 +245,12 @@ void Tape_following() {
       servoJoint.write(180);
       treasure = Sonar::detecting(soundcm, LEFTMOST, curr_base_pos, dist_offtape);
       Tape_follow.bridge_Back();
-      delay(600);
+      delay(1000);
       reflectanceL = analogRead(R_L_Sensor);
       reflectanceR = analogRead(R_R_Sensor);
       reflectanceLL = analogRead(R_L_Sensor_2);
       reflectanceRR = analogRead(R_R_Sensor_2);
+      break;
     }
   
   }
