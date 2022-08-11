@@ -19,7 +19,7 @@ void Tape_following();
 void IR_following();
 void read_IR(IR_SENSOR);
 
-Encoders encoders1 = Encoders();
+//Encoders encoders1 = Encoders();
 
 Servo servoClaw;
 Servo servoJoint;
@@ -60,10 +60,10 @@ void setup() {
   Claw::initializeBase(&servoBase);
   Claw::initializeJoint(&servoJoint);
   Sonar::initializeSonar(&sonar, &backSonar);
-  Linkage::initializeLink(&servoLinkL, &servoLinkR);
+  //Linkage::initializeLink(&servoLinkL, &servoLinkR);
 
   Claw::clawSetup();
-  Linkage::linkageSetup();
+  //Linkage::linkageSetup();
 
 
   attachInterrupt(digitalPinToInterrupt(enc_L), handle_interrupt, RISING);
@@ -135,15 +135,16 @@ void loop() {
     else if(treasure == 1){
       curr_base_pos = Claw::baseRotate(LEFTMOST, Claw::base_servo_ptr->read());
       float dist = Sonar::getDist(soundcm);
-      if (dist <=25){
+      if (dist <=22){
         Tape::tp_motor_stop();
+        delay(100);
         Tape::bridge_Right();
         delay(10);
         Tape::tp_motor_stop();
         servoJoint.write(180);
         treasure = Sonar::detecting(soundcm, LEFTMOST, curr_base_pos, dist);
         Tape_follow.bridge_Back();
-        delay(100);
+        delay(600);
 
       }
     }
@@ -173,30 +174,30 @@ void handle_interrupt() {
 
 
 
-void rampSection() {
-  //change numbers
-  int distFromBeacon = 1000;
-  const int countFor90 = 999;
-  const int idealDist = 20;
+// void rampSection() {
+//   //change numbers
+//   int distFromBeacon = 1000;
+//   const int countFor90 = 999;
+//   const int idealDist = 20;
 
-  //while further than we want, keep moving
-  while (distFromBeacon>idealDist) {
-    distFromBeacon = Sonar::getDist(soundcm);
-  }
+//   //while further than we want, keep moving
+//   while (distFromBeacon>idealDist) {
+//     distFromBeacon = Sonar::getDist(soundcm);
+//   }
 
-  encoders1.rightPivotCount(countFor90);
-  encoders1.rightPivotCount(countFor90);
-  encoders1.rightPivotCount(countFor90);
+//   encoders1.rightPivotCount(countFor90);
+//   encoders1.rightPivotCount(countFor90);
+//   encoders1.rightPivotCount(countFor90);
 
-  Linkage::dropRamp();
+//   Linkage::dropRamp();
 
-  encoders1.rightPivotCount(countFor90);
-  encoders1.rightPivotCount(countFor90);
+//   encoders1.rightPivotCount(countFor90);
+//   encoders1.rightPivotCount(countFor90);
 
 
-  //rotate left by 180 and drop ramp
-  //rotate left by 180 and move forward
-}
+//   //rotate left by 180 and drop ramp
+//   //rotate left by 180 and move forward
+// }
 
 
 void Tape_following() {
@@ -237,15 +238,16 @@ void Tape_following() {
     // Serial.println(" ");
     // delay(20);
     int dist_offtape = Sonar::getDist(soundcm);
-    if (dist_offtape <= 20 ){
+    if (dist_offtape <= 22 ){
       Tape_follow.tp_motor_stop();
+      delay(100);
       Tape::bridge_Right();
       delay(95);
       Tape::tp_motor_stop();
       servoJoint.write(180);
       treasure = Sonar::detecting(soundcm, LEFTMOST, curr_base_pos, dist_offtape);
       Tape_follow.bridge_Back();
-      delay(300);
+      delay(600);
       reflectanceL = analogRead(R_L_Sensor);
       reflectanceR = analogRead(R_R_Sensor);
       reflectanceLL = analogRead(R_L_Sensor_2);

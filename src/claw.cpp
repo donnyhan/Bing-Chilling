@@ -67,14 +67,14 @@ int Claw::baseRotate(int base_target_pos, int base_current_pos){
         while(base_current_pos < base_target_pos){
             base_servo_ptr->write(base_current_pos);
             base_current_pos++;
-            delay(20);
+            delay(10);
         }
     }
     else if(base_current_pos>base_target_pos){
         while(base_current_pos>base_target_pos){
             base_servo_ptr->write(base_current_pos);
             base_current_pos--;
-            delay(20);
+            delay(10);
         }
     }
     else{}

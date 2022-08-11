@@ -58,9 +58,9 @@ int Sonar::detecting(float soundcm, int targ_base_pos, int base_pos, int distanc
                 distanceR = getDist(soundcm);
             }
 
-            if(((distanceL-distance)>= 6 && (distanceR-distance >= 6)) || 
-            ((distanceL-distance) >= 6 && (distanceR == -1)) ||
-            ((distanceR-distance) >= 6 && (distanceL == -1))) { 
+            if(((distanceL-distance)>= 3 && (distanceR-distance >= 3)) || 
+            ((distanceL-distance) >= 3 && (distanceR == -1)) ||
+            ((distanceR-distance) >= 3 && (distanceL == -1))) { 
                 //if( abs(distance-distanceL2)<=5 || abs(distance-distanceR2)<=5){ 
                 // rack extends until the IR sensor no longer detects a signal as the idle is between the claw
                 // check the hall effect sensor
@@ -71,7 +71,7 @@ int Sonar::detecting(float soundcm, int targ_base_pos, int base_pos, int distanc
 
             
                 //else{}
-                yesTreasure++;
+                yesTreasure=1;
             }
             else{
 
