@@ -29,7 +29,7 @@ NewPing backSonar(BACK_TRIG_PIN,BACK_ECHO_PIN,MAX_DISTANCE);
 
 Servo servoLinkL;
 Servo servoLinkR;
-Tape Tape_follow (4,1);
+Tape Tape_follow (8,1);
 
 volatile uint32_t P_value = Tape_follow.P_value;
 volatile uint32_t D_value = Tape_follow.D_value;
@@ -119,9 +119,8 @@ void loop() {
     if(treasure == 0){
       curr_base_pos = Claw::baseRotate(LEFTMOST, Claw::base_servo_ptr->read());
       float dist = Sonar::getDist(soundcm);
-      if (dist <=25){
+      if (dist <=25 && dist != 0){
         Tape::tp_motor_stop();
-        //encoders1.rightPivotCount(4);
         Tape::bridge_Right();
         delay(80);
         Tape::tp_motor_stop();
@@ -129,13 +128,12 @@ void loop() {
         treasure = Sonar::detecting(soundcm, LEFTMOST, curr_base_pos, dist);
         Tape_follow.bridge_Back();
         delay(300);
-
       }
     }
     else if(treasure == 1){
       curr_base_pos = Claw::baseRotate(LEFTMOST, Claw::base_servo_ptr->read());
       float dist = Sonar::getDist(soundcm);
-      if (dist <=22){
+      if (dist <=22 && dist != 0){
         Tape::tp_motor_stop();
         delay(100);
         Tape::bridge_Right();
@@ -238,7 +236,7 @@ void Tape_following() {
     // Serial.println(" ");
     // delay(20);
     int dist_offtape = Sonar::getDist(soundcm);
-    if (dist_offtape <= 22 ){
+    if (dist_offtape <= 22 && dist_offtape != 0){
       Tape_follow.tp_motor_stop();
       delay(100);
       Tape::bridge_Right();
