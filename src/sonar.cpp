@@ -1,13 +1,15 @@
 #ifndef SONAR_C
 #define SONAR_C
 
-#include "const.h"
-#include "sonar.h"
-#include "claw.h"
+#include <const.h>
+#include <sonar.h>
+#include <claw.h>
+#include <tapeFollowing.h>
 #include <NewPing.h>
 
 NewPing* Sonar::sonar_ptr;
 NewPing* Sonar::back_sonar_ptr;
+int Sonar::yesTreasure = 0;
 
 void Sonar::initializeSonar(NewPing* _sonar, NewPing* _backsonar){
     Sonar::sonar_ptr = _sonar;
@@ -21,19 +23,21 @@ float Sonar::getDist(float soundcm){
     return dist;
 }
 
-float Sonar::detecting(float soundcm, int targ_base_pos) { //target base position is the estimated position
+int Sonar::detecting(float soundcm, int targ_base_pos, int base_pos, int distance) { //target base position is the estimated position
 // the arm should be in to get the treasure
 
-     int distance=-1, distanceL=-1, distanceR=-1, distanceL2=-1, distanceR2=-1;
+     int distanceL=-1, distanceR=-1, distanceL2=-1, distanceR2=-1;
      // int curr_base_pos= getBasePos();
      const int targL = targ_base_pos - ANGLE;
      const int targR = targ_base_pos + ANGLE;
      
-        int base_pos = Claw::baseRotate(targ_base_pos, Claw::base_servo_ptr->read());
-        distance = getDist(soundcm);
+        //int base_pos = Claw::baseRotate(targ_base_pos, Claw::base_servo_ptr->read());
+        //distance = getDist(soundcm);
 
         if (distance < 18 && distance != 0){
             //Robot stops moving (wheel speed zero) 
+            //Tape::tp_motor_stop();
+
             if (targL>=LEFTMOST) {
                 base_pos = Claw::baseRotate(targL, base_pos);
                 distanceL = getDist(soundcm);
@@ -54,7 +58,6 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
                 distanceR = getDist(soundcm);
             }
 
-
             if(((distanceL-distance)>= 6 && (distanceR-distance >= 6)) || 
             ((distanceL-distance) >= 6 && (distanceR == -1)) ||
             ((distanceR-distance) >= 6 && (distanceL == -1))) { 
@@ -68,12 +71,13 @@ float Sonar::detecting(float soundcm, int targ_base_pos) { //target base positio
 
             
                 //else{}
+                yesTreasure++;
             }
             else{
 
             }
         }
-        return distance;
+        return yesTreasure;
 
 }
 

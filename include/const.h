@@ -98,7 +98,7 @@ const float DEPOSITPOS = 8                                      ;
 // #define RL2_Threshold 100
 // #define RR2_Threshold 100
 
-#define MOTOR_FREQ 500
+#define MOTOR_FREQ 300
 
 //Encoders
 #define PWMFREQ 200

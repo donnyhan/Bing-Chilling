@@ -81,7 +81,7 @@ int Claw::baseRotate(int base_target_pos, int base_current_pos){
     return base_current_pos;
 }
 
-void Claw::clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipline2 = 2
+void Claw::clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipline2 = 2, default = 3
     int joint_pos;
     if(state == 1){
         for(joint_pos = 0; joint_pos < JOINTMAX; joint_pos +=1){
@@ -94,6 +94,12 @@ void Claw::clawJoint(int state){ //only 3 states: raised = 1, lowered = 0, zipli
             joint_servo_ptr->write(180-joint_pos);        
             delay(10);  
         }  
+    }
+    else if (state == 3) {
+        for(joint_pos = 0; joint_pos < 10; joint_pos +=1){
+            joint_servo_ptr->write(180-joint_pos);
+            delay(20);
+        }
     }
     else{
         for(joint_pos = 0; joint_pos < 90; joint_pos+= 1 ){

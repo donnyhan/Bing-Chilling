@@ -11,7 +11,8 @@ public:
     static NewPing* back_sonar_ptr;
     static void initializeSonar(NewPing* _sonar, NewPing* _backsonar);
     static float getDist(float soundcm);
-    static float detecting(float soundcm, int targ_base_pos);
+    static int detecting(float soundcm, int targ_base_pos, int base_pos, int distance);
+    static int yesTreasure;
 };
 
 #endif

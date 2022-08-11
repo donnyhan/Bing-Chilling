@@ -47,11 +47,13 @@ volatile int RR_error = 0;
 
 const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
 const float soundcm = soundc / 100;
-volatile int stage = 1;
+volatile int stage;
+int treasure; 
+int curr_base_pos;
 
 void setup() {
   pinSetup();
-  Serial.begin(9600);
+  //Serial.begin(9600);
   // attachInterrupt(digitalPinToInterrupt(enc_L), handle_L_interrupt, FALLING);
 
   Claw::initializeClaw(&servoClaw);
@@ -70,9 +72,10 @@ void setup() {
   //pwm_start(MOTOR_L_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
   //pwm_start(MOTOR_R_F, PWMFREQ, FWD_SPEED, RESOLUTION_10B_COMPARE_FORMAT);
 
-  Serial.println("Serial start");
-
-
+  //Serial.println("Serial start");
+  stage = 1;
+  treasure = 0;
+  curr_base_pos = 90;
 
 }
 
@@ -110,8 +113,46 @@ void loop() {
   //Sonar::detecting(soundcm,90);
 
   while (stage == 1) {
+    servoJoint.write(174);
     Tape_following();
-    Sonar::detecting(soundcm, LEFTMOST);
+
+    if(treasure == 0){
+      curr_base_pos = Claw::baseRotate(LEFTMOST, Claw::base_servo_ptr->read());
+      float dist = Sonar::getDist(soundcm);
+      if (dist <=25){
+        Tape::tp_motor_stop();
+        //encoders1.rightPivotCount(4);
+        Tape::bridge_Right();
+        delay(80);
+        Tape::tp_motor_stop();
+        servoJoint.write(180);
+        treasure = Sonar::detecting(soundcm, LEFTMOST, curr_base_pos, dist);
+        Tape_follow.bridge_Back();
+        delay(300);
+
+      }
+    }
+    else if(treasure == 1){
+      curr_base_pos = Claw::baseRotate(LEFTMOST, Claw::base_servo_ptr->read());
+      float dist = Sonar::getDist(soundcm);
+      if (dist <=25){
+        Tape::tp_motor_stop();
+        Tape::bridge_Right();
+        delay(10);
+        Tape::tp_motor_stop();
+        servoJoint.write(180);
+        treasure = Sonar::detecting(soundcm, LEFTMOST, curr_base_pos, dist);
+        Tape_follow.bridge_Back();
+        delay(100);
+
+      }
+    }
+    else{
+      curr_base_pos = Claw::baseRotate(90, Claw::base_servo_ptr->read());
+      Claw::closeClaw();
+    }
+    
+    
   }
 
   // while(stage == 2) {
@@ -126,7 +167,7 @@ void loop() {
 }
 
 void handle_interrupt() {
-  //Tape.handle_interrupt();
+  //Tape_following.handle_interrupt();
   
 }
 
@@ -170,13 +211,14 @@ void Tape_following() {
     Serial.print("  reflectance RR: "); Serial.print(reflectanceRR);
     Serial.println(" ");
     while(reflectanceL > CW_Threshold && reflectanceR > CW_Threshold) {
+    Tape_follow.tp_motor_stop();
     Tape_follow.tp_motor_right(40);
     reflectanceL = analogRead(R_L_Sensor);
     reflectanceR = analogRead(R_R_Sensor);
     error = 0;
     delay(180);
-    Tape_follow.tp_motor_straight();
-    delay(500);
+    Tape_follow.CW(1000);
+    delay(400);
     Tape_follow.tp_motor_stop();
   }
 
@@ -188,12 +230,27 @@ void Tape_following() {
     reflectanceR = analogRead(R_R_Sensor);
     reflectanceLL = analogRead(R_L_Sensor_2);
     reflectanceRR = analogRead(R_R_Sensor_2);
-    Serial.print("reflectance L: "); Serial.print(reflectanceL);
-    Serial.print("  reflectance R: "); Serial.print(reflectanceR);
-    Serial.print("  reflectance LL: "); Serial.print(reflectanceLL);
-    Serial.print("  reflectance RR: "); Serial.print(reflectanceRR);
-    Serial.println(" ");
-    delay(20);
+    // Serial.print("reflectance L: "); Serial.print(reflectanceL);
+    // Serial.print("  reflectance R: "); Serial.print(reflectanceR);
+    // Serial.print("  reflectance LL: "); Serial.print(reflectanceLL);
+    // Serial.print("  reflectance RR: "); Serial.print(reflectanceRR);
+    // Serial.println(" ");
+    // delay(20);
+    int dist_offtape = Sonar::getDist(soundcm);
+    if (dist_offtape <= 20 ){
+      Tape_follow.tp_motor_stop();
+      Tape::bridge_Right();
+      delay(95);
+      Tape::tp_motor_stop();
+      servoJoint.write(180);
+      treasure = Sonar::detecting(soundcm, LEFTMOST, curr_base_pos, dist_offtape);
+      Tape_follow.bridge_Back();
+      delay(300);
+      reflectanceL = analogRead(R_L_Sensor);
+      reflectanceR = analogRead(R_R_Sensor);
+      reflectanceLL = analogRead(R_L_Sensor_2);
+      reflectanceRR = analogRead(R_R_Sensor_2);
+    }
   
   }
 
@@ -258,9 +315,6 @@ void Tape_following() {
   Serial.print("error");
   Serial.println(error);
 
-  delay(50);
-
- 
 }
 
 void IR_following() {

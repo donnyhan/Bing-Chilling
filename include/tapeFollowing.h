@@ -3,7 +3,7 @@
 
 
 //constants
-#define BASE_SPEED 400
+#define BASE_SPEED 600
 #define PID_Threshold_L 200
 #define PID_Threshold_R 150
 #define Side_Threshold_R 210
@@ -31,6 +31,7 @@ public:
     static void bridge_Right();
     static void bridge_Back();
     void handle_interrupt();
+    void CW(int speed);
 
     void tapeSetup();
     void tape_following();
