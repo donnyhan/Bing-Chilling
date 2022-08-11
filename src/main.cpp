@@ -119,7 +119,7 @@ void loop() {
     if(treasure == 0){
       curr_base_pos = Claw::baseRotate(LEFTMOST, Claw::base_servo_ptr->read());
       float dist = Sonar::getDist(soundcm);
-      if (dist <=25 && dist != 0){
+      if (dist <=20 && dist != 0){
         Tape::tp_motor_stop();
         Tape::bridge_Right();
         delay(80);
@@ -133,7 +133,7 @@ void loop() {
     else if(treasure == 1){
       curr_base_pos = Claw::baseRotate(LEFTMOST, Claw::base_servo_ptr->read());
       float dist = Sonar::getDist(soundcm);
-      if (dist <=22 && dist != 0){
+      if (dist <=20 && dist != 0){
         Tape::tp_motor_stop();
         delay(100);
         Tape::bridge_Right();
@@ -236,7 +236,7 @@ void Tape_following() {
     // Serial.println(" ");
     // delay(20);
     int dist_offtape = Sonar::getDist(soundcm);
-    if (dist_offtape <= 22 && dist_offtape != 0){
+    if (dist_offtape <= 20 && dist_offtape != 0){
       Tape_follow.tp_motor_stop();
       delay(100);
       Tape::bridge_Right();
