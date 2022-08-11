@@ -16,10 +16,13 @@
 #define OLED_RESET     -1 // This display does not have a reset pin accessible
 Adafruit_SSD1306 display_handler(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+enum IR_SENSOR {LEFT_IR, RIGHT_IR};
+
 void handle_L_interrupt();
 void handle_interrupt();
 void Tape_following();
 void IR_following();
+void read_IR(IR_SENSOR);
 
 //Encoders encoders1 = Encoders();
 
@@ -32,8 +35,6 @@ NewPing backSonar(BACK_TRIG_PIN,BACK_ECHO_PIN,MAX_DISTANCE);
 Servo servoLinkL;
 Servo servoLinkR;
 Tape Tape_follow (4,1);
-
-enum IR_SENSOR {LEFT_IR, RIGHT_IR};
 
 const float soundc = 331.4 + (0.606 * TEMP) + (0.0124 * HUM);
 const float soundcm = soundc / 100;
@@ -274,53 +275,81 @@ void Tape_following() {
 }
 
 void IR_following() {
-// int i = 0;
-// int Left_IR;
-// int Right_IR;
-// int IR_error;
-// int G;
+int i = 0;
+int Left_IR;
+int Right_IR;
+int IR_error;
+int G;
+int IR_P_value = 9;
+int IR_D_value = 2;
 
-//   while(i < 2) { //reads left and right IR sensor almost simultaneously
+  while(i < 2) { //reads left and right IR sensor almost simultaneously
       
-//     if(i % 2 == 0) {
-//     read_IR(LEFT_IR);
-//     Left_IR = analogRead(IR_Sensor);
+    if(i % 2 == 0) {
+    read_IR(LEFT_IR);
+    Left_IR = analogRead(IR_Sensor);
 
-//     } else {
-//     read_IR(RIGHT_IR);
-//     Right_IR = analogRead(IR_Sensor);
+    } else {
+    read_IR(RIGHT_IR);
+    Right_IR = analogRead(IR_Sensor);
 
-//     }
+    }
 
-//     i++;
+    i++;
 
-//   }
+  }
 
-//   if(Left_IR != 0 && Right_IR != 0) { //checks to see if both are 0. (proceeds to next stage if so)
-//   IR_error = Left_IR - Right_IR;
+  if(Left_IR != 0 && Right_IR != 0) { //checks to see if both are 0. (proceeds to next stage if so)
+  IR_error = Left_IR - Right_IR;
 
-//     if(IR_error >= -IR_Threshold && IR_error <= IR_Threshold) { //if both sensors 
-//       IR_error = 0;
-//       G = 0;
-//       Tape::tp_motor_straight();
+    if(IR_error >= -IR_Threshold && IR_error <= IR_Threshold) { //if both sensors are similar to each other
+      IR_error = 0;
+      G = 0;
+      Tape::tp_motor_straight();
 
-//     } else if(IR_error > IR_Threshold) {
-//       G=PID(IR_P_value,IR_D_value,IR_error);
-//       Tape::tp_motor_left(G);
+    } else if(IR_error > IR_Threshold) {
+      G=Tape_follow.PID(IR_P_value,IR_D_value,IR_error);
+      Tape::tp_motor_left(G);
   
-//     } else if (IR_error < -IR_Threshold) {
-//       IR_error = abs(IR_error);
-//       G=PID(IR_P_value,IR_D_value,IR_error);
-//       Tape::tp_motor_right(G);
+    } else if (IR_error < -IR_Threshold) {
+      IR_error = abs(IR_error);
+      G=Tape_follow.PID(IR_P_value,IR_D_value,IR_error);
+      Tape::tp_motor_right(G);
 
-//     }
+    }
 
-//   } else {
+  } else {
 
-//       if(stage == 2){
-//       stage++;
-//     }
+      if(stage == 2){
+      stage++;
+    }
 
-//   }
+  }
 
 }
+
+void read_IR(IR_SENSOR sensor)
+  {
+    int low_switch, high_switch;
+    switch (sensor)
+    {
+    case LEFT_IR:
+      low_switch = IR_Right_Switch;
+      high_switch = IR_Left_Switch;
+      break;
+    case RIGHT_IR:
+      low_switch = IR_Left_Switch;
+      high_switch = IR_Right_Switch;
+      break;
+    }
+
+    digitalWrite(low_switch, LOW);
+    delay(50);
+    digitalWrite(high_switch, HIGH);
+
+    digitalWrite(IR_Discharge, HIGH);
+    delay(3);
+    digitalWrite(IR_Discharge, LOW);
+    delay(3);
+
+  }
