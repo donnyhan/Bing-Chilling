@@ -274,49 +274,53 @@ void Tape_following() {
 }
 
 void IR_following() {
-i = 0;
+// int i = 0;
+// int Left_IR;
+// int Right_IR;
+// int IR_error;
+// int G;
 
-  while(i < 2) { //reads left and right IR sensor almost simultaneously
+//   while(i < 2) { //reads left and right IR sensor almost simultaneously
       
-    if(i % 2 == 0) {
-    read_IR(LEFT_IR);
-    Left_IR = analogRead(IR_Sensor);
+//     if(i % 2 == 0) {
+//     read_IR(LEFT_IR);
+//     Left_IR = analogRead(IR_Sensor);
 
-    } else {
-    read_IR(RIGHT_IR);
-    Right_IR = analogRead(IR_Sensor);
+//     } else {
+//     read_IR(RIGHT_IR);
+//     Right_IR = analogRead(IR_Sensor);
 
-    }
+//     }
 
-    i++;
+//     i++;
 
-  }
+//   }
 
-  if(Left_IR != 0 && Right_IR != 0) { //checks to see if both are 0. (proceeds to next stage if so)
-  IR_error = Left_IR - Right_IR;
+//   if(Left_IR != 0 && Right_IR != 0) { //checks to see if both are 0. (proceeds to next stage if so)
+//   IR_error = Left_IR - Right_IR;
 
-    if(IR_error >= -IR_Threshold && IR_error <= IR_Threshold) { //if both sensors 
-      IR_error = 0;
-      G = 0;
-      Tape::tp_motor_straight();
+//     if(IR_error >= -IR_Threshold && IR_error <= IR_Threshold) { //if both sensors 
+//       IR_error = 0;
+//       G = 0;
+//       Tape::tp_motor_straight();
 
-    } else if(IR_error > IR_Threshold) {
-      G=PID(IR_P_value,IR_D_value,IR_error);
-      Tape::tp_motor_left(G);
+//     } else if(IR_error > IR_Threshold) {
+//       G=PID(IR_P_value,IR_D_value,IR_error);
+//       Tape::tp_motor_left(G);
   
-    } else if (IR_error < -IR_Threshold) {
-      IR_error = abs(IR_error);
-      G=PID(IR_P_value,IR_D_value,IR_error);
-      Tape::tp_motor_right(G);
+//     } else if (IR_error < -IR_Threshold) {
+//       IR_error = abs(IR_error);
+//       G=PID(IR_P_value,IR_D_value,IR_error);
+//       Tape::tp_motor_right(G);
 
-    }
+//     }
 
-  } else {
+//   } else {
 
-      if(stage == 2){
-      stage++;
-    }
+//       if(stage == 2){
+//       stage++;
+//     }
 
-  }
+//   }
 
 }

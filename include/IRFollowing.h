@@ -21,9 +21,6 @@ public:
   volatile int IR_error = 0;
   volatile int IR_lasterr = 0;
 
-  enum IR_SENSOR {LEFT_IR, RIGHT_IR};
-
 };
 
 #endif
-

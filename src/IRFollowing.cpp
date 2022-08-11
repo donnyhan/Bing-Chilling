@@ -5,29 +5,6 @@
 #include <IRFollowing.h>
 #include <tapeFollowing.h>
 
-void IR::read_IR(IR_SENSOR sensor) {
-  int low_switch, high_switch;
-  switch (sensor) {
-    case LEFT_IR:
-      low_switch = IR_Right_Switch;
-      high_switch = IR_Left_Switch;
-      break;
-    case RIGHT_IR:
-      low_switch = IR_Left_Switch;
-      high_switch = IR_Right_Switch;
-      break;
-    }
-
-  digitalWrite(low_switch, LOW);
-  delay(50);
-  digitalWrite(high_switch, HIGH);
-
-  digitalWrite(IR_Discharge, HIGH);
-  delay(3);
-  digitalWrite(IR_Discharge, LOW);
-  delay(3);
-
-}
 
 void IR::read_Left_IR() {
     digitalWrite(IR_Right_Switch, LOW);
@@ -93,33 +70,32 @@ void IR::IR_Run() {
 
   IRL_error = Left_IR - Right_IR;
 
-  if(IRL_error >= -IR_Threshold && IRL_error <= IR_Threshold) {
+  if(IRL_error >= 0 && IRL_error <= IR_Threshold) {
     IR_error = 0;
     G = 0;
     Tape::tp_motor_straight();
     // display_handler.setCursor(70,20);
     // display_handler.println("straight");
-  
+
   } else if(IRL_error > IR_Threshold) {
     IR_error = IRL_error;
     G=PID(IR_P_value,IR_D_value,IR_error);
     Tape::tp_motor_left(G);
-    
+
     // display_handler.setCursor(70,20);
     // display_handler.println("go left");
-  
-  } else if (IRL_error < -IR_Threshold) {
+
+  } else if (IRL_error < 0) {
     IR_error = abs(IRL_error);
     G=PID(IR_P_value,IR_D_value,IR_error);
     Tape::tp_motor_right(G);
-    
+
     // display_handler.setCursor(70,20);
     // display_handler.println("go right");
 
   }
 
-  
+
   }
 
   #endif
-
